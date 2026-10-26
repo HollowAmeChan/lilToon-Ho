@@ -92,12 +92,43 @@ namespace lilToon
             }
         }
 
-        private static void DrawShaderTypeWarn(Material material)
+        private bool HasMaterialVariants(Material material)
         {
-            if(!isMultiVariants && lilShaderUtils.IsOverlayShaderName(material.shader.name) && lilEditorGUI.AutoFixHelpBox(GetLoc("sHelpSelectOverlay")))
+            return lilMaterialUtils.IsMaterialVariant(material) ||
+                (materials != null && materials.Any(lilMaterialUtils.IsMaterialVariant));
+        }
+
+        private void DrawShaderTypeWarn(Material material)
+        {
+            if(!HasMaterialVariants(material) && !isMultiVariants && lilShaderUtils.IsOverlayShaderName(material.shader.name) && lilEditorGUI.AutoFixHelpBox(GetLoc("sHelpSelectOverlay")))
             {
                 material.shader = lts;
             }
+        }
+
+        private void DrawMaterialVariantInfo(Material material)
+        {
+            if(!HasMaterialVariants(material)) return;
+
+            EditorGUILayout.BeginVertical(boxOuter);
+            EditorGUILayout.LabelField(GetLoc("sMaterialVariant"), EditorStyles.boldLabel);
+            var variants = (materials ?? new[] {material}).Where(lilMaterialUtils.IsMaterialVariant);
+            foreach(var variant in variants)
+            {
+                var parent = lilMaterialUtils.GetMaterialVariantParent(variant);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.ObjectField(GetLoc("sParentMaterial"), parent, typeof(Material), false);
+                EditorGUI.EndDisabledGroup();
+                if(lilEditorGUI.Button(GetLoc("sSelectParentMaterial")))
+                {
+                    Selection.activeObject = parent;
+                    EditorGUIUtility.PingObject(parent);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.HelpBox(GetLoc("sMaterialVariantHelp"), MessageType.Info);
+            EditorGUILayout.EndVertical();
         }
 
         private static void SelectEditorMode()

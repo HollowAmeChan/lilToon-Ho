@@ -1696,3 +1696,15 @@ msgstr "该材质可能已经存在，您确定要覆盖它吗？"
 
 msgid "sUtilInvalidFormat"
 msgstr "无效的格式。"
+
+msgid "sMaterialVariant"
+msgstr "材质变体"
+
+msgid "sParentMaterial"
+msgstr "父材质"
+
+msgid "sSelectParentMaterial"
+msgstr "定位父材质"
+
+msgid "sMaterialVariantHelp"
+msgstr "Shader、渲染模式和描边启用状态继承自父材质，请在父材质上修改。贴图、颜色和数值仍可作为变体覆写编辑。选中项包含变体时禁用 Shader 切换。"

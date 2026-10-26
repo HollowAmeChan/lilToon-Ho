@@ -26,7 +26,13 @@ namespace lilToon
                 EditorGUILayout.BeginVertical(boxOuter);
                 if(isShowRenderMode)
                 {
-                    if(isOutl != EditorGUILayout.ToggleLeft(GetLoc("sOutline"), isOutl, customToggleFont))
+                    if(HasMaterialVariants(material))
+                    {
+                        EditorGUI.BeginDisabledGroup(true);
+                        EditorGUILayout.ToggleLeft(GetLoc("sOutline"), isOutl, customToggleFont);
+                        EditorGUI.EndDisabledGroup();
+                    }
+                    else if(isOutl != EditorGUILayout.ToggleLeft(GetLoc("sOutline"), isOutl, customToggleFont))
                     {
                         isOutl = !isOutl;
                         SetupMaterialWithRenderingMode(renderingModeBuf, transparentModeBuf);

@@ -157,7 +157,7 @@ namespace lilToon
                     {
                         //------------------------------------------------------------------------------------------------------------------------------
                         // Reset Button
-                        if(lilEditorGUI.Button(GetLoc("sRenderingReset")))
+                        if(!HasMaterialVariants(material) && lilEditorGUI.Button(GetLoc("sRenderingReset")))
                         {
                             material.enableInstancing = false;
                             SetupMaterialWithRenderingMode(renderingModeBuf, transparentModeBuf);
@@ -173,7 +173,9 @@ namespace lilToon
                             // Shader
                             int shaderType = 1;
                             int shaderTypeBuf = shaderType;
+                            EditorGUI.BeginDisabledGroup(HasMaterialVariants(material));
                             shaderType = lilEditorGUI.Popup(GetLoc("sShaderType"),shaderType,new string[]{GetLoc("sShaderTypeNormal"),GetLoc("sShaderTypeLite")});
+                            EditorGUI.EndDisabledGroup();
                             if(shaderTypeBuf != shaderType)
                             {
                                 if(shaderType==0) isLite = false;
@@ -461,7 +463,7 @@ namespace lilToon
                     {
                         //------------------------------------------------------------------------------------------------------------------------------
                         // Reset Button
-                        if(lilEditorGUI.Button(GetLoc("sRenderingReset")))
+                        if(!HasMaterialVariants(material) && lilEditorGUI.Button(GetLoc("sRenderingReset")))
                         {
                             material.enableInstancing = false;
                             material.renderQueue = -1;
@@ -1439,7 +1441,7 @@ namespace lilToon
                     {
                         //------------------------------------------------------------------------------------------------------------------------------
                         // Reset Button
-                        if(lilEditorGUI.Button(GetLoc("sRenderingReset")))
+                        if(!HasMaterialVariants(material) && lilEditorGUI.Button(GetLoc("sRenderingReset")))
                         {
                             material.enableInstancing = false;
                             SetupMaterialWithRenderingMode(renderingModeBuf, transparentModeBuf);
@@ -1455,7 +1457,9 @@ namespace lilToon
                             // Shader
                             int shaderType = 0;
                             int shaderTypeBuf = shaderType;
+                            EditorGUI.BeginDisabledGroup(HasMaterialVariants(material));
                             shaderType = lilEditorGUI.Popup(GetLoc("sShaderType"),shaderType,new string[]{GetLoc("sShaderTypeNormal"),GetLoc("sShaderTypeLite")});
+                            EditorGUI.EndDisabledGroup();
                             if(shaderTypeBuf != shaderType)
                             {
                                 if(shaderType==0) isLite = false;
@@ -1626,7 +1630,9 @@ namespace lilToon
                         TextureBakeGUI(material, 3);
                         if(lilEditorGUI.Button(GetLoc("sConvertLite"))) CreateLiteMaterial(material);
                         if(mtoon != null && lilEditorGUI.Button(GetLoc("sConvertMToon"))) CreateMToonMaterial(material);
+                        EditorGUI.BeginDisabledGroup(HasMaterialVariants(material));
                         if(!isMulti && !isFur && !isRefr && !isGem && lilEditorGUI.Button(GetLoc("sConvertMulti"))) CreateMultiMaterial(material);
+                        EditorGUI.EndDisabledGroup();
                         EditorGUILayout.EndVertical();
                         EditorGUILayout.EndVertical();
 

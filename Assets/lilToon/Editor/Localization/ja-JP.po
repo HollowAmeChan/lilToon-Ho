@@ -1696,3 +1696,15 @@ msgstr "マテリアルが既に存在している可能性があります。上
 
 msgid "sUtilInvalidFormat"
 msgstr "フォーマットが不正です。"
+
+msgid "sMaterialVariant"
+msgstr "マテリアルバリアント"
+
+msgid "sParentMaterial"
+msgstr "親マテリアル"
+
+msgid "sSelectParentMaterial"
+msgstr "親を選択"
+
+msgid "sMaterialVariantHelp"
+msgstr "シェーダー、描画モード、輪郭線の有効状態は親から継承されます。変更するには親を編集してください。テクスチャ、色、数値はバリアントで上書きできます。選択にバリアントが含まれる場合、シェーダー切り替えは無効です。"

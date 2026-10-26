@@ -1696,3 +1696,15 @@ msgstr "Materials may already exist. Are you sure you want to overwrite it?"
 
 msgid "sUtilInvalidFormat"
 msgstr "Invalid format."
+
+msgid "sMaterialVariant"
+msgstr "Material Variant"
+
+msgid "sParentMaterial"
+msgstr "Parent Material"
+
+msgid "sSelectParentMaterial"
+msgstr "Select Parent"
+
+msgid "sMaterialVariantHelp"
+msgstr "Shader, rendering mode, and outline enablement are inherited from the parent. Edit the parent to change these settings. Texture, color, and numeric properties remain editable as variant overrides. Shader switching is disabled when the selection includes a variant."

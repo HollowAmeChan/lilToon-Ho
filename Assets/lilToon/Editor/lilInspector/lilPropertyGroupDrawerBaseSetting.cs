@@ -25,7 +25,20 @@ namespace lilToon
 
         private void DrawRenderingModeSettings(Material material, string sTransparentMode, string[] sRenderingModeList, string[] sRenderingModeListLite)
         {
-            if(isMultiVariants)
+            if(HasMaterialVariants(material))
+            {
+                EditorGUI.BeginDisabledGroup(true);
+                if(isLite)  lilEditorGUI.Popup(GetLoc("sRenderingMode"), (int)renderingModeBuf, sRenderingModeListLite);
+                else        lilEditorGUI.Popup(GetLoc("sRenderingMode"), (int)renderingModeBuf, sRenderingModeList);
+                EditorGUI.EndDisabledGroup();
+                if(renderingModeBuf == RenderingMode.Transparent)
+                {
+                    EditorGUI.BeginDisabledGroup(true);
+                    lilEditorGUI.Popup(GetLoc("sTransparentMode"), (int)transparentModeBuf, sTransparentModeList);
+                    EditorGUI.EndDisabledGroup();
+                }
+            }
+            else if(isMultiVariants)
             {
                 GUI.enabled = false;
                 EditorGUI.showMixedValue = true;

@@ -15,8 +15,23 @@ namespace lilToon
 {
     public class lilMaterialUtils
     {
+        internal static Material GetMaterialVariantParent(Material material)
+        {
+            #if UNITY_2022_1_OR_NEWER
+                return material != null ? material.parent : null;
+            #else
+                return null;
+            #endif
+        }
+
+        internal static bool IsMaterialVariant(Material material)
+        {
+            return GetMaterialVariantParent(material) != null;
+        }
+
         internal static void SetupMaterialWithRenderingMode(Material material, RenderingMode renderingMode, TransparentMode transparentMode, bool isoutl, bool islite, bool istess, bool ismulti)
         {
+            if(material == null || IsMaterialVariant(material)) return;
             Undo.RecordObject(material, null);
             int renderQueue = GetTrueRenderQueue(material);
             RenderingMode rend = renderingMode;

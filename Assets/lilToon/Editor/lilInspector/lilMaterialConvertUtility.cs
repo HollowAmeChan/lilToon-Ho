@@ -20,7 +20,8 @@ namespace lilToon
         #region
         public static void SetupMaterialWithRenderingMode(Material material, RenderingMode renderingMode, TransparentMode transparentMode, bool isoutl, bool islite, bool istess, bool ismulti)
         {
-            if(!isMultiVariants) lilMaterialUtils.SetupMaterialWithRenderingMode(material, renderingMode, transparentMode, isoutl, islite, istess, ismulti);
+            if(isMultiVariants || material == null || lilMaterialUtils.IsMaterialVariant(material)) return;
+            lilMaterialUtils.SetupMaterialWithRenderingMode(material, renderingMode, transparentMode, isoutl, islite, istess, ismulti);
         }
 
         public static void SetupMaterialWithRenderingMode(Material material, RenderingMode renderingMode, TransparentMode transparentMode, bool isoutl, bool islite, bool istess)
@@ -369,6 +370,7 @@ namespace lilToon
         // TODO : Support other rendering mode
         private void CreateMultiMaterial(Material material)
         {
+            if(material == null || HasMaterialVariants(material)) return;
             material.shader = ltsm;
             if(isOutl)  material.shader = ltsmo;
             else        material.shader = ltsm;
@@ -391,6 +393,7 @@ namespace lilToon
 
         protected void ConvertMaterialToCustomShader(Material material)
         {
+            if(material == null || lilMaterialUtils.IsMaterialVariant(material)) return;
             lilShaderManager.InitializeShaders();
             var shader = material.shader;
                  if(shader == lts)           { ReplaceToCustomShaders(); shader = lts       ;}
