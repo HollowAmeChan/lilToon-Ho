@@ -1,0 +1,5 @@
+{
+    "name": "lilToon.Ho.Validation",
+    "references": ["lilToon.Editor"],
+    "includePlatforms": ["Editor"]
+}
