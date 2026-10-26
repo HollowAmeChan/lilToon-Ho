@@ -186,6 +186,7 @@ Shader "_lil/[Optional] lilToonOverlayOnePass"
                         _ShadowNormalStrength       ("sNormalStrength", Range(0, 1)) = 1.0
                         _ShadowBorder               ("sBorder", Range(0, 1)) = 0.5
                         _ShadowBlur                 ("sBlur", Range(0, 1)) = 0.1
+        [NoScaleOffset] _ShadowReceiveMask          ("sMask", 2D) = "white" {}
                         _ShadowReceive              ("sReceiveShadow", Range(0, 1)) = 0
                         _Shadow2ndColor             ("2nd Color", Color) = (0.68,0.66,0.79,1)
         [NoScaleOffset] _Shadow2ndColorTex          ("2nd Color", 2D) = "black" {}
@@ -545,6 +546,7 @@ Shader "_lil/[Optional] lilToonOverlayOnePass"
         [lilEnum]       _OutlineVectorUVMode        ("UV Mode|UV0|UV1|UV2|UV3", Int) = 0
                         _OutlineVectorScale         ("Vector scale", Range(-10,10)) = 1
                         _OutlineEnableLighting      ("sEnableLighting", Range(0, 1)) = 1
+        [NoScaleOffset] _OutlineZBiasMask           ("Mask", 2D) = "white" {}
                         _OutlineZBias               ("Z Bias", Float) = 0
         [lilToggle]     _OutlineDisableInVR         ("sDisableInVR", Int) = 0
 

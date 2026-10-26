@@ -80,6 +80,7 @@ Shader "Hidden/ltspass_lite_cutout"
         [lilEnum]       _OutlineVertexR2Width       ("sOutlineVertexColorUsages", Int) = 0
         [lilToggle]     _OutlineDeleteMesh          ("sDeleteMesh0", Int) = 0
                         _OutlineEnableLighting      ("sEnableLighting", Range(0, 1)) = 1
+        [NoScaleOffset] _OutlineZBiasMask           ("Mask", 2D) = "white" {}
                         _OutlineZBias               ("Z Bias", Float) = 0
 
         //----------------------------------------------------------------------------------------------------------------------

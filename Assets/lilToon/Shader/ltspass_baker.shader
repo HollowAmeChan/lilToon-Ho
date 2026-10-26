@@ -142,6 +142,7 @@ Shader "Hidden/ltsother_baker"
             #define LIL_FEATURE_ShadowColorTex
             #define LIL_FEATURE_Shadow2ndColorTex
             #define LIL_FEATURE_Shadow3rdColorTex
+            #define LIL_FEATURE_ShadowReceiveMask
             #define LIL_FEATURE_RimShadeMask
             #define LIL_FEATURE_BacklightColorTex
             #define LIL_FEATURE_SmoothnessTex
@@ -170,6 +171,7 @@ Shader "Hidden/ltsother_baker"
             #define LIL_FEATURE_DissolveNoiseMask
             #define LIL_FEATURE_OutlineTex
             #define LIL_FEATURE_OutlineWidthMask
+            #define LIL_FEATURE_OutlineZBiasMask
             #define LIL_FEATURE_OutlineVectorTex
             #define LIL_FEATURE_FurNoiseMask
             #define LIL_FEATURE_FurMask
