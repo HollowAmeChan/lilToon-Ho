@@ -118,6 +118,7 @@ public class lilToonSetting : ScriptableObject
     public bool LIL_FEATURE_DissolveNoiseMask = true;
     public bool LIL_FEATURE_OutlineTex = true;
     public bool LIL_FEATURE_OutlineWidthMask = true;
+    public bool LIL_FEATURE_OutlineZBiasMask = true;
     public bool LIL_FEATURE_OutlineVectorTex = true;
     public bool LIL_FEATURE_FurNoiseMask = true;
     public bool LIL_FEATURE_FurMask = true;
@@ -366,6 +367,7 @@ public class lilToonSetting : ScriptableObject
         shaderSetting.LIL_FEATURE_DissolveNoiseMask = false;
         shaderSetting.LIL_FEATURE_OutlineTex = false;
         shaderSetting.LIL_FEATURE_OutlineWidthMask = false;
+        shaderSetting.LIL_FEATURE_OutlineZBiasMask = false;
         shaderSetting.LIL_FEATURE_OutlineVectorTex = false;
         shaderSetting.LIL_FEATURE_FurNoiseMask = false;
         shaderSetting.LIL_FEATURE_FurMask = false;
@@ -480,6 +482,7 @@ public class lilToonSetting : ScriptableObject
             shaderSetting.LIL_FEATURE_DissolveNoiseMask = true;
             shaderSetting.LIL_FEATURE_OutlineTex = true;
             shaderSetting.LIL_FEATURE_OutlineWidthMask = true;
+            shaderSetting.LIL_FEATURE_OutlineZBiasMask = true;
             shaderSetting.LIL_FEATURE_OutlineVectorTex = true;
             shaderSetting.LIL_FEATURE_FurNoiseMask = true;
             shaderSetting.LIL_FEATURE_FurMask = true;
@@ -700,6 +703,7 @@ public class lilToonSetting : ScriptableObject
         sb.AppendLine("#define LIL_FEATURE_DissolveNoiseMask");
         if (shaderSetting.LIL_FEATURE_OutlineTex) sb.AppendLine("#define LIL_FEATURE_OutlineTex");
         if (shaderSetting.LIL_FEATURE_OutlineWidthMask) sb.AppendLine("#define LIL_FEATURE_OutlineWidthMask");
+        if (shaderSetting.LIL_FEATURE_OutlineZBiasMask) sb.AppendLine("#define LIL_FEATURE_OutlineZBiasMask");
         if (shaderSetting.LIL_FEATURE_OutlineVectorTex) sb.AppendLine("#define LIL_FEATURE_OutlineVectorTex");
         if (shaderSetting.LIL_FEATURE_FurNoiseMask) sb.AppendLine("#define LIL_FEATURE_FurNoiseMask");
         if (shaderSetting.LIL_FEATURE_FurMask) sb.AppendLine("#define LIL_FEATURE_FurMask");
@@ -1463,6 +1467,7 @@ public class lilToonSetting : ScriptableObject
         CheckTexture(ref shaderSetting.LIL_FEATURE_DissolveNoiseMask         , "_DissolveNoiseMask", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_OutlineTex                , "_OutlineTex", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_OutlineWidthMask          , "_OutlineWidthMask", material);
+        CheckTexture(ref shaderSetting.LIL_FEATURE_OutlineZBiasMask          , "_OutlineZBiasMask", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_OutlineVectorTex          , "_OutlineVectorTex", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_FurNoiseMask              , "_FurNoiseMask", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_FurMask                   , "_FurMask", material);
@@ -1524,6 +1529,7 @@ public class lilToonSetting : ScriptableObject
         shaderSetting.LIL_FEATURE_DissolveNoiseMask          = shaderSetting.LIL_FEATURE_DissolveNoiseMask        || propname.Contains("_DissolveNoiseMask");
         shaderSetting.LIL_FEATURE_OutlineTex                 = shaderSetting.LIL_FEATURE_OutlineTex               || propname.Contains("_OutlineTex");
         shaderSetting.LIL_FEATURE_OutlineWidthMask           = shaderSetting.LIL_FEATURE_OutlineWidthMask         || propname.Contains("_OutlineWidthMask");
+        shaderSetting.LIL_FEATURE_OutlineZBiasMask           = shaderSetting.LIL_FEATURE_OutlineZBiasMask         || propname.Contains("_OutlineZBiasMask");
         shaderSetting.LIL_FEATURE_OutlineVectorTex           = shaderSetting.LIL_FEATURE_OutlineVectorTex         || propname.Contains("_OutlineVectorTex");
         shaderSetting.LIL_FEATURE_FurNoiseMask               = shaderSetting.LIL_FEATURE_FurNoiseMask             || propname.Contains("_FurNoiseMask");
         shaderSetting.LIL_FEATURE_FurMask                    = shaderSetting.LIL_FEATURE_FurMask                  || propname.Contains("_FurMask");
