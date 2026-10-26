@@ -152,6 +152,7 @@ namespace lilToon
         private readonly lilMaterialProperty shadowBorderColor          = new lilMaterialProperty("_ShadowBorderColor", PropertyBlock.Shadow);
         private readonly lilMaterialProperty shadowBorderRange          = new lilMaterialProperty("_ShadowBorderRange", PropertyBlock.Shadow);
         private readonly lilMaterialProperty shadowReceive              = new lilMaterialProperty("_ShadowReceive", PropertyBlock.Shadow);
+        private readonly lilMaterialProperty shadowReceiveMask          = new lilMaterialProperty("_ShadowReceiveMask", true, PropertyBlock.Shadow);
         private readonly lilMaterialProperty shadow2ndReceive           = new lilMaterialProperty("_Shadow2ndReceive", PropertyBlock.Shadow);
         private readonly lilMaterialProperty shadow3rdReceive           = new lilMaterialProperty("_Shadow3rdReceive", PropertyBlock.Shadow);
         private readonly lilMaterialProperty shadowMaskType             = new lilMaterialProperty("_ShadowMaskType", PropertyBlock.Shadow);
@@ -761,6 +762,7 @@ namespace lilToon
                 shadowBorderColor,
                 shadowBorderRange,
                 shadowReceive,
+                shadowReceiveMask,
                 shadow2ndReceive,
                 shadow3rdReceive,
                 shadowMaskType,

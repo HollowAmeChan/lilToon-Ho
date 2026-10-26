@@ -5,6 +5,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en-US\n"
 
+msgid "sShadowReceiveMask"
+msgstr "Receive Shadow Mask"
+
 msgid "sLanguageWarning"
 msgstr ""
 

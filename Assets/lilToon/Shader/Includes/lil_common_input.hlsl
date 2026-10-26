@@ -853,6 +853,7 @@ TEXTURE2D(_ShadowStrengthMask);
 TEXTURE2D(_ShadowColorTex);
 TEXTURE2D(_Shadow2ndColorTex);
 TEXTURE2D(_Shadow3rdColorTex);
+TEXTURE2D(_ShadowReceiveMask);
 TEXTURE2D(_RimShadeMask);
 TEXTURE2D(_BacklightColorTex);
 TEXTURE2D(_SmoothnessTex);

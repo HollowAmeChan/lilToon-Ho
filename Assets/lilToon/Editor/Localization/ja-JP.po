@@ -5,6 +5,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ja-JP\n"
 
+msgid "sShadowReceiveMask"
+msgstr "影を受け取るマスク"
+
 msgid "sLanguageWarning"
 msgstr ""
 

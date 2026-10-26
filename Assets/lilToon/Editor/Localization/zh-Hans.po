@@ -5,6 +5,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh-Hans\n"
 
+msgid "sShadowReceiveMask"
+msgstr "接收阴影蒙版"
+
 msgid "sLanguageWarning"
 msgstr ""
 

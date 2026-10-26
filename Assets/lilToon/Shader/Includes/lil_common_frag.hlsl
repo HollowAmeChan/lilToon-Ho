@@ -970,13 +970,18 @@
                 shadowStrengthMask.r = shadowStrengthMask.a;
             }
 
+            float shadowReceiveMask = 1.0;
+            #if defined(LIL_FEATURE_ShadowReceiveMask)
+                shadowReceiveMask = LIL_SAMPLE_2D(_ShadowReceiveMask, samp, fd.uvMain).r;
+            #endif
+
             // Shadow
             #if (defined(LIL_USE_SHADOW) || defined(LIL_LIGHTMODE_SHADOWMASK)) && defined(LIL_FEATURE_RECEIVE_SHADOW)
                 float calculatedShadow = saturate(fd.attenuation + distance(fd.L, fd.origL));
-                lns.x *= lerp(1.0, calculatedShadow, _ShadowReceive);
-                lns.y *= lerp(1.0, calculatedShadow, _Shadow2ndReceive);
+                lns.x *= lerp(1.0, calculatedShadow, _ShadowReceive * shadowReceiveMask);
+                lns.y *= lerp(1.0, calculatedShadow, _Shadow2ndReceive * shadowReceiveMask);
                 #if defined(LIL_FEATURE_SHADOW_3RD)
-                    lns.z *= lerp(1.0, calculatedShadow, _Shadow3rdReceive);
+                    lns.z *= lerp(1.0, calculatedShadow, _Shadow3rdReceive * shadowReceiveMask);
                 #endif
             #endif
 
@@ -1055,7 +1060,7 @@
                 float3 flatN = normalize(mul((float3x3)LIL_MATRIX_M, float3(0.0,0.25,1.0)));//normalize(LIL_MATRIX_M._m02_m12_m22);
                 float lnFlat = saturate((dot(flatN, fd.L) + _ShadowFlatBorder) / _ShadowFlatBlur);
                 #if (defined(LIL_USE_SHADOW) || defined(LIL_LIGHTMODE_SHADOWMASK)) && defined(LIL_FEATURE_RECEIVE_SHADOW)
-                    lnFlat *= lerp(1.0, calculatedShadow, _ShadowReceive);
+                    lnFlat *= lerp(1.0, calculatedShadow, _ShadowReceive * shadowReceiveMask);
                 #endif
                 lns = lerp(lnFlat, lns, shadowStrengthMask.r);
             }

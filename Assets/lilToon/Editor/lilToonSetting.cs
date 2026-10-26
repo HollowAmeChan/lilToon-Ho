@@ -89,6 +89,7 @@ public class lilToonSetting : ScriptableObject
     public bool LIL_FEATURE_ShadowColorTex = true;
     public bool LIL_FEATURE_Shadow2ndColorTex = true;
     public bool LIL_FEATURE_Shadow3rdColorTex = true;
+    public bool LIL_FEATURE_ShadowReceiveMask = true;
     public bool LIL_FEATURE_RimShadeMask = true;
     public bool LIL_FEATURE_BacklightColorTex = true;
     public bool LIL_FEATURE_SmoothnessTex = true;
@@ -336,6 +337,7 @@ public class lilToonSetting : ScriptableObject
         shaderSetting.LIL_FEATURE_ShadowColorTex = false;
         shaderSetting.LIL_FEATURE_Shadow2ndColorTex = false;
         shaderSetting.LIL_FEATURE_Shadow3rdColorTex = false;
+        shaderSetting.LIL_FEATURE_ShadowReceiveMask = false;
         shaderSetting.LIL_FEATURE_RimShadeMask = false;
         shaderSetting.LIL_FEATURE_BacklightColorTex = false;
         shaderSetting.LIL_FEATURE_SmoothnessTex = false;
@@ -449,6 +451,7 @@ public class lilToonSetting : ScriptableObject
             shaderSetting.LIL_FEATURE_ShadowColorTex = true;
             shaderSetting.LIL_FEATURE_Shadow2ndColorTex = true;
             shaderSetting.LIL_FEATURE_Shadow3rdColorTex = true;
+            shaderSetting.LIL_FEATURE_ShadowReceiveMask = true;
             shaderSetting.LIL_FEATURE_RimShadeMask = true;
             shaderSetting.LIL_FEATURE_BacklightColorTex = true;
             shaderSetting.LIL_FEATURE_SmoothnessTex = true;
@@ -667,6 +670,7 @@ public class lilToonSetting : ScriptableObject
         if (shaderSetting.LIL_FEATURE_ShadowColorTex) sb.AppendLine("#define LIL_FEATURE_ShadowColorTex");
         if (shaderSetting.LIL_FEATURE_Shadow2ndColorTex) sb.AppendLine("#define LIL_FEATURE_Shadow2ndColorTex");
         if (shaderSetting.LIL_FEATURE_Shadow3rdColorTex) sb.AppendLine("#define LIL_FEATURE_Shadow3rdColorTex");
+        if (shaderSetting.LIL_FEATURE_ShadowReceiveMask) sb.AppendLine("#define LIL_FEATURE_ShadowReceiveMask");
         if (shaderSetting.LIL_FEATURE_RimShadeMask) sb.AppendLine("#define LIL_FEATURE_RimShadeMask");
         if (shaderSetting.LIL_FEATURE_BacklightColorTex) sb.AppendLine("#define LIL_FEATURE_BacklightColorTex");
         if (shaderSetting.LIL_FEATURE_SmoothnessTex) sb.AppendLine("#define LIL_FEATURE_SmoothnessTex");
@@ -1430,6 +1434,7 @@ public class lilToonSetting : ScriptableObject
         CheckTexture(ref shaderSetting.LIL_FEATURE_ShadowColorTex            , "_ShadowColorTex", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_Shadow2ndColorTex         , "_Shadow2ndColorTex", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_Shadow3rdColorTex         , "_Shadow3rdColorTex", material);
+        CheckTexture(ref shaderSetting.LIL_FEATURE_ShadowReceiveMask         , "_ShadowReceiveMask", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_RimShadeMask              , "_RimShadeMask", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_BacklightColorTex         , "_BacklightColorTex", material);
         CheckTexture(ref shaderSetting.LIL_FEATURE_SmoothnessTex             , "_SmoothnessTex", material);
@@ -1490,6 +1495,7 @@ public class lilToonSetting : ScriptableObject
         shaderSetting.LIL_FEATURE_ShadowColorTex             = shaderSetting.LIL_FEATURE_ShadowColorTex           || propname.Contains("_ShadowColorTex");
         shaderSetting.LIL_FEATURE_Shadow2ndColorTex          = shaderSetting.LIL_FEATURE_Shadow2ndColorTex        || propname.Contains("_Shadow2ndColorTex");
         shaderSetting.LIL_FEATURE_Shadow3rdColorTex          = shaderSetting.LIL_FEATURE_Shadow3rdColorTex        || propname.Contains("_Shadow3rdColorTex");
+        shaderSetting.LIL_FEATURE_ShadowReceiveMask          = shaderSetting.LIL_FEATURE_ShadowReceiveMask        || propname.Contains("_ShadowReceiveMask");
         shaderSetting.LIL_FEATURE_RimShadeMask               = shaderSetting.LIL_FEATURE_RimShadeMask             || propname.Contains("_RimShadeMask");
         shaderSetting.LIL_FEATURE_BacklightColorTex          = shaderSetting.LIL_FEATURE_BacklightColorTex        || propname.Contains("_BacklightColorTex");
         shaderSetting.LIL_FEATURE_SmoothnessTex              = shaderSetting.LIL_FEATURE_SmoothnessTex            || propname.Contains("_SmoothnessTex");

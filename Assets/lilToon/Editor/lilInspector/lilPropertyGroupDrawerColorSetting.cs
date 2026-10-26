@@ -129,6 +129,7 @@ namespace lilToon
                         LocalizedPropertyTexture(maskStrengthContent, shadowStrengthMask, shadowStrength);
                         LocalizedProperty(shadowStrengthMaskLOD, 2);
                     }
+                    if(shadowReceiveMask.p != null) LocalizedPropertyTexture(new GUIContent(GetLoc("sShadowReceiveMask"), GetLoc("sBlendR")), shadowReceiveMask);
                     lilEditorGUI.DrawLine();
                     LocalizedProperty(shadowColorType);
                     LocalizedPropertyTexture(shadow1stColorRGBAContent, shadowColorTex, shadowColor);

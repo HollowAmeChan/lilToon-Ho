@@ -5,6 +5,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh-Hant\n"
 
+msgid "sShadowReceiveMask"
+msgstr "接收陰影遮罩"
+
 msgid "sLanguageWarning"
 msgstr "翻譯可能不准確，因為使用了機器翻譯。"
 
