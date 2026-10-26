@@ -1,6 +1,6 @@
 # lilToon-Ho：基线与移植任务清单
 
-记录日期：2026-10-26。当前阶段：**已确认 H01–H04，开始逐项移植。**
+记录日期：2026-10-26。当前阶段：**H01–H04 已实现并通过验证。**
 
 ## 1. 新仓库基线
 
@@ -13,10 +13,10 @@
 | 基线提交 | `e698a2f791bd28dd1aabf227c74f14bedeca3587` |
 | 上游提交日期 | 2026-10-20，`fix: Incorrect light probe brightness #378` |
 | 包版本依据 | `Assets/lilToon/package.json`：`2.4.1`，Unity 最低版本声明为 `2022.3` |
-| 当前工作分支 | `codex/ho-port-inventory` |
+| 发布分支 | `master`；开发提交保留在 `codex/ho-port-inventory` |
 | GitHub 仓库 | https://github.com/HollowAmeChan/lilToon-Ho |
 
-已用 `git ls-remote upstream HEAD` 再次核对，远程 HEAD 与本地基线一致。根目录旧 `version.json` 仍写着 `2.1.1`，不能以它判断此次版本。
+拉取时已用 `git ls-remote upstream HEAD` 核对官方基线。根目录旧 `version.json` 仍写着 `2.1.1`，不能以它判断此次版本。此仓库保留官方 Git 历史；GitHub 上是独立派生仓库，未覆盖原有 `HollowAmeChan/lilToon`。
 
 定位：面向 VRC / Warudo 的 lilToon 小修版，沿用官方功能与渲染管线支持。旧 fork 的基线是 2.3.2，不直接用旧 fork 的当前文件覆盖新版。
 
@@ -25,6 +25,15 @@
 ## 2. 已明确的四项任务
 
 以下四项已经用户确认，2026-10-26 开始实施。
+
+| 任务 | 实现提交 | 状态 |
+| --- | --- | --- |
+| H01 顶点色描边兜底 | `988c92c` | 已实现 |
+| H02 公共接收阴影 Mask | `2424cc8` | 已实现，包含平面阴影分支 |
+| H03 描边 Z 偏移 Mask | `fb42406` | 已实现，普通 / Lite / Multi 接线 |
+| H04 Material Variant 面板 | `48f2c48` | 已实现，含混选、嵌套变体与旧版 API 隔离 |
+
+下文“2.4.1 现状”描述官方基线，历史来源保留用于追溯。
 
 ### H01：描边顶点色修正模式的空颜色兜底
 
@@ -44,7 +53,7 @@
 - 不新增 `_Shadow2ndReceiveMask` / `_Shadow3rdReceiveMask`，不先移植三张再清理。
 - 触点：`CustomShaderResources/Properties/Default.lilblock`、`DefaultAll.lilblock`；Inspector 属性绑定与阴影分组；`lilToonSetting.cs` 的特性开关、贴图扫描和动画属性检测；`lil_common_input.hlsl`、`lil_common_frag.hlsl`、`lil_replace_keywords.hlsl`。
 - 2.4.1 现状：无上述 Mask；三段仍直接使用 `_ShadowReceive` / `_Shadow2ndReceive` / `_Shadow3rdReceive`。
-- 实现前需处理的遗漏：上游还有 `_ShadowMaskType == 1` 的平面阴影分支，`lnFlat` 单独使用 `_ShadowReceive`；历史三合一改动未覆盖这一处。移植时需明确它也使用公共 Mask，防止另一条路径继续接收阴影。
+- 已补齐的历史遗漏：上游还有 `_ShadowMaskType == 1` 的平面阴影分支，`lnFlat` 单独使用 `_ShadowReceive`；历史三合一改动未覆盖这一处。本次已让它使用公共 Mask，并通过 GPU 像素测试验证。
 - 后续验收：空槽 / 白 / 黑 / 灰、三段分别启用、平面阴影模式、普通 / Multi、特性裁剪、已有材质。Lite 原本走简化阴影流程，不凭空承诺三段控制。
 
 ### H03：描边 Z 偏移 Mask
@@ -96,7 +105,20 @@
 - 主要来源：`D:\Unity_Fork\lilToon` 的本地完整 Git 历史，调查时 HEAD 为 `b124f7e`。该仓库有既存未提交修改，本轮没有改动它。
 - 补充来源：`D:\Unity_Fork\lilToon-URP-Extensions` 的提交历史和相关文档，调查时 HEAD 为 `3dc98144`。
 - 新旧代码核对：已核对三项核心功能的真实 diff 与官方 2.4.1 当前实现，而非只按提交标题判断。旧 `LILTOON魔改流程案例.md` 还描述三张接收阴影 Mask；以之后 `b3195ab` 的实际代码为准。
-- 本轮完成的是 Git 基线与静态源码调查，没有执行 Unity 编译、VRC 上传或 Warudo 运行验证，也不声称候选改动已经适配这些环境。
-- 开始实现后，优先验证 VRC 使用的 BRP 路径；按实际 Warudo 工程的 Unity 版本和管线验证对应路径。保留上游其余路径，涉及共享函数签名的变更同时检查普通、Lite、Multi 和相关 pass。
+- 首轮完成 Git 基线与静态调查；第二轮实施 H01–H04，验证记录见下节。
+- 优先验证 VRC 使用的 BRP 路径；按本地 Warudo 工程的 Unity 2021.3 版本补查旧 API 兼容。上游其余管线路径保留，本轮未声称已经完成 URP / HDRP / XR 实机验证。
 
 当前明确实施范围：**H01、H02、H03、H04**。其余候选项保持待选。
+
+## 6. 2026-10-26 验证记录
+
+- 隔离工程，BRP、Windows D3D11，未修改现有 VRC / Warudo 工程。
+- Unity **2022.3.22f1**：65 项通过。调用官方生成器；普通、描边、Cutout 描边、Transparent 描边、Lite 描边、Multi、Multi 描边的各 Pass 同步编译；检查生成的公共 Mask 属性、无多余第二 / 三张 Mask 属性。
+- Unity **2021.3.45f2**：55 项通过。相同 Shader 编译、GPU 像素与特性扫描；该版本没有 Material Variant API，相关检查按条件跳过，生产代码已通过该版本编译。
+- 2021.3.18f1 在启动阶段受本机许可证限制，改用本机另一 Warudo 工程所用的 2021.3.45f2 完成验证，未改动许可证或工程配置。
+- GPU 检查直接调用生产 HLSL：默认黑 / 白顶点色回退与有效 RGB 解码；顶点阶段 Z Mask 白 / 黑 / 灰、负偏移；三段共用接收阴影 Mask；平面阴影分支；裁掉 Mask 特性后保持原标量行为。
+- Material Variant 检查使用实际持久化父材质、子变体与嵌套变体：Shader 切换保护、混选检测、Multi 转换保护、颜色 / 数值 / 贴图覆写、父材质变更后的继承传播。
+- 同步 63 份预生成 Shader，135 行新增，提取已验证生成结果中的新属性与宏；保留上游其余生成配置（VRC Light Volumes、变体裁剪等），不把隔离工程的环境差异带入仓库。
+- 使用 `-ho-verify-generated` 再次验证实际交付的预生成 Shader，Unity 2022.3.22f1 的 65 项检查全部通过。
+- 验证脚本及运行说明位于 `Tests~/`，Unity 安装包不会默认导入该测试目录。
+- 未执行 VRC 上传、Warudo 运行时加载、交互式 Inspector 点击或 VR 设备测试。
