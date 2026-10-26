@@ -122,3 +122,15 @@
 - 使用 `-ho-verify-generated` 再次验证实际交付的预生成 Shader，Unity 2022.3.22f1 的 65 项检查全部通过。
 - 验证脚本及运行说明位于 `Tests~/`，Unity 安装包不会默认导入该测试目录。
 - 未执行 VRC 上传、Warudo 运行时加载、交互式 Inspector 点击或 VR 设备测试。
+
+## 7. UPM 路径修复与 VCC 工程接入（2026-10-27）
+
+- 修复提交：`8e6e3c2`。在 `System.IO` 边界使用 `PackageInfo.resolvedPath` 解析包虚拟路径，保留 AssetDatabase 和 Shader include 使用的虚拟路径。
+- 覆盖包版本读取、启动 RP 记录、Shader 模板读取与生成、优化输入文件、贴图读取、配置锁和诊断信息读取。
+- 本地化通过 AssetDatabase 枚举、加载 .po，支持 zh-CN → zh-Hans 等区域名映射。
+- Unity 2022.3.22f1 隔离工程的本地 UPM 模式：9 项 UPM 检查及 65 项完整回归检查通过。
+- Git UPM 安装验证的批处理被自动审批拒绝，工具仅返回 `blocked by policy`，未提供具体原因；本轮没有声称已经完成 Git 来源的运行验证。
+- `VCC_Break_VRC` 已从 VPM lilToon 2.3.4 切为本地 UPM 依赖：`file:D:/Unity_Fork/lilToon-Ho/Assets/lilToon`。此方式直接使用新仓库，不依赖 GitHub 下载；在另一台机器上需要调整本地路径或完成 Git UPM 验证后改用 Git URL。
+- VPM 中 lilToon 的 dependencies / locked 记录已移除，其他依赖保留，UPM lock 由 Unity 重新生成。
+- 在该工程正在运行的 Unity 中完成验证：2.4.1 包解析正确；现有 12 个材质的 Shader GUID 保持一致；普通、描边、Cutout 描边、Transparent 描边、Lite 描边、Multi、Multi 描边的各 Pass 编译通过；五种语言均能加载。
+- 旧嵌入包和依赖配置备份在 `D:/runtime_scratch/liltoon-ho-vcc-migration-20261026`；临时编辑器验证脚本已移出工程，验证报告为该目录中的 `success.txt`。
