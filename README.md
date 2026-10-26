@@ -11,6 +11,11 @@ UPM Git URL：`https://github.com/HollowAmeChan/lilToon-Ho.git?path=Assets/lilTo
 包名和 GUID 与官方相同；安装时替换已有 lilToon，避免同时安装两份。
 新增 Mask 默认白色，保留原有效果。顶点色修正仍由 A 通道控制描边宽度。
 
+支持 Git UPM 与本地 `file:` 包安装，编辑器的文件读写会解析到 UPM 实际包目录。
+从 VCC/VPM 版本切换时，先备份并移出 `Packages/jp.lilxyzw.liltoon`，同时移除
+`Packages/vpm-manifest.json` 中该包的 `dependencies` 和 `locked` 记录，再添加 UPM 依赖。
+已有嵌入包会优先于 Git 依赖；保留 VPM 记录也可能让官方包在后续解析时被重新安装。
+
 来源、范围和验证记录见 [Ho 移植任务清单](docs/Ho移植任务清单.md)。以下为上游说明与文档入口。
 
 ## English

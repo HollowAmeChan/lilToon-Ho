@@ -19,7 +19,7 @@ namespace lilToon
                 var v = new lilToonInspector.lilToonVersion();
                 try
                 {
-                    EditorJsonUtility.FromJsonOverwrite(File.ReadAllText(lilDirectoryManager.GetPackageJsonPath()), v);
+                    EditorJsonUtility.FromJsonOverwrite(File.ReadAllText(lilDirectoryManager.GetFullPath(lilDirectoryManager.GetPackageJsonPath())), v);
                     v.semver = new SemVerParser(v.version);
                     version = v;
                 }

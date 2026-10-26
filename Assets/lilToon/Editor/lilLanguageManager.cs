@@ -108,8 +108,9 @@ namespace lilToon
         {
             InitializeLanguage();
             var langs = L10n.GetLanguages();
+            if(langs.Length == 0) return;
             EditorGUI.BeginChangeCheck();
-            var index = EditorGUILayout.Popup("Language", Array.IndexOf(langs, Settings.instance.language), L10n.GetLanguageNames());
+            var index = EditorGUILayout.Popup("Language", Array.IndexOf(langs, L10n.ResolveLanguage(Settings.instance.language)), L10n.GetLanguageNames());
             if (EditorGUI.EndChangeCheck())
             {
                 Settings.instance.language = langs[index];

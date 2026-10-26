@@ -168,7 +168,7 @@ public class lilToonSetting : ScriptableObject
     internal static void SaveLockedSetting(lilToonSetting shaderSetting)
     {
         string path = lilDirectoryManager.GetSettingLockPath();
-        File.WriteAllText(path, JsonUtility.ToJson(shaderSetting, true));
+        File.WriteAllText(lilDirectoryManager.GetFullPath(path), JsonUtility.ToJson(shaderSetting, true));
         if(!path.Contains("Packages")) AssetDatabase.Refresh();
     }
 
@@ -176,14 +176,14 @@ public class lilToonSetting : ScriptableObject
     {
         var lockedSetting = CreateInstance<lilToonSetting>();
         string path = lilDirectoryManager.GetSettingLockPath();
-        if(!File.Exists(path))
+        if(!File.Exists(lilDirectoryManager.GetFullPath(path)))
         {
             return;
         }
 
         try
         {
-            JsonUtility.FromJsonOverwrite(File.ReadAllText(path), lockedSetting);
+            JsonUtility.FromJsonOverwrite(File.ReadAllText(lilDirectoryManager.GetFullPath(path)), lockedSetting);
             shaderSetting.LIL_OPTIMIZE_APPLY_SHADOW_FA       = lockedSetting.LIL_OPTIMIZE_APPLY_SHADOW_FA;
             shaderSetting.LIL_OPTIMIZE_USE_FORWARDADD        = lockedSetting.LIL_OPTIMIZE_USE_FORWARDADD;
             shaderSetting.LIL_OPTIMIZE_USE_FORWARDADD_SHADOW = lockedSetting.LIL_OPTIMIZE_USE_FORWARDADD_SHADOW;
@@ -209,8 +209,8 @@ public class lilToonSetting : ScriptableObject
     internal static void DeleteLockedSetting()
     {
         string path = lilDirectoryManager.GetSettingLockPath();
-        if(File.Exists(path))         File.Delete(path);
-        if(File.Exists(path+".meta")) File.Delete(path+".meta");
+        if(File.Exists(lilDirectoryManager.GetFullPath(path)))         File.Delete(lilDirectoryManager.GetFullPath(path));
+        if(File.Exists(lilDirectoryManager.GetFullPath(path+".meta"))) File.Delete(lilDirectoryManager.GetFullPath(path+".meta"));
         if(!path.Contains("Packages")) AssetDatabase.Refresh();
     }
 
@@ -501,7 +501,7 @@ public class lilToonSetting : ScriptableObject
         foreach(var baseShaderPath in lilDirectoryManager.FindAssetsPath("", new[] {baseShaderFolderPath}).Where(p => p.Contains(".lilinternal")))
         {
             string shaderPath = shaderFolderPath + Path.AltDirectorySeparatorChar + Path.GetFileNameWithoutExtension(baseShaderPath) + ".shader";
-            File.WriteAllText(shaderPath, lilShaderContainer.UnpackContainer(baseShaderPath));
+            File.WriteAllText(lilDirectoryManager.GetFullPath(shaderPath), lilShaderContainer.UnpackContainer(baseShaderPath));
         }
         foreach(var folder in lilDirectoryManager.FindAssetsPath("t:shader").Where(p => p.Contains(".lilcontainer")).Select(p => Path.GetDirectoryName(p)).Distinct())
         {
@@ -537,8 +537,8 @@ public class lilToonSetting : ScriptableObject
             if(shaderPath.Contains(".lilcontainer")) continue;
 
             string baseShaderPath = baseShaderFolderPath + Path.AltDirectorySeparatorChar + Path.GetFileNameWithoutExtension(shaderPath) + ".lilinternal";
-            if(!File.Exists(baseShaderPath)) continue;
-            File.WriteAllText(shaderPath, lilShaderContainer.UnpackContainer(baseShaderPath, null, doOptimize));
+            if(!File.Exists(lilDirectoryManager.GetFullPath(baseShaderPath))) continue;
+            File.WriteAllText(lilDirectoryManager.GetFullPath(shaderPath), lilShaderContainer.UnpackContainer(baseShaderPath, null, doOptimize));
         }
         foreach(var shaderPath in shaderPathes)
         {
@@ -1587,7 +1587,7 @@ public class lilToonSetting : ScriptableObject
             }
             else
             {
-                sr = new StreamReader(path);
+                sr = new StreamReader(lilDirectoryManager.GetFullPath(path));
             }
             string line;
             bool isComment = false;

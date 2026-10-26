@@ -19,8 +19,8 @@ namespace lilToon
         internal static void Load()
         {
             guicontents.Clear();
-            var path = localizationFolder + "/" + Settings.instance.language + ".po";
-            if(File.Exists(path)) instance.localizationAsset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(path);
+            var path = localizationFolder + "/" + ResolveLanguage(Settings.instance.language) + ".po";
+            instance.localizationAsset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(path);
 
             if(!instance.localizationAssetFallback) instance.localizationAssetFallback = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(localizationFolder + "/en-US.po");
             if(!instance.localizationAsset) instance.localizationAsset = new LocalizationAsset();
@@ -28,12 +28,38 @@ namespace lilToon
 
         internal static string[] GetLanguages()
         {
-            return languages ??= Directory.GetFiles(localizationFolder, "*.po").Select(f => Path.GetFileNameWithoutExtension(f)).Where(f => !f.StartsWith("._")).ToArray();
+            if(languages != null) return languages;
+            if(string.IsNullOrEmpty(localizationFolder)) return new string[0];
+            return languages = AssetDatabase.FindAssets(string.Empty, new[] {localizationFolder})
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(p => p.EndsWith(".po", System.StringComparison.OrdinalIgnoreCase))
+                .Select(Path.GetFileNameWithoutExtension)
+                .Where(f => !f.StartsWith("._"))
+                .Distinct().OrderBy(f => f, System.StringComparer.Ordinal).ToArray();
+        }
+
+        internal static string ResolveLanguage(string language)
+        {
+            var available = GetLanguages();
+            var exact = available.FirstOrDefault(l => string.Equals(l, language, System.StringComparison.OrdinalIgnoreCase));
+            if(exact != null) return exact;
+            if(string.IsNullOrEmpty(language)) return "en-US";
+            if(language.StartsWith("zh", System.StringComparison.OrdinalIgnoreCase))
+            {
+                bool traditional = language.IndexOf("Hant", System.StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    language.EndsWith("TW", System.StringComparison.OrdinalIgnoreCase) ||
+                    language.EndsWith("HK", System.StringComparison.OrdinalIgnoreCase) ||
+                    language.EndsWith("MO", System.StringComparison.OrdinalIgnoreCase);
+                var chinese = traditional ? "zh-Hant" : "zh-Hans";
+                if(available.Contains(chinese)) return chinese;
+            }
+            var neutral = language.Split('-')[0];
+            return available.FirstOrDefault(l => l.StartsWith(neutral + "-", System.StringComparison.OrdinalIgnoreCase)) ?? "en-US";
         }
 
         internal static string[] GetLanguageNames()
         {
-            return languageNames ??= languages.Select(l => {
+            return languageNames ??= GetLanguages().Select(l => {
                 if(l == "zh-Hans") return "简体中文";
                 if(l == "zh-Hant") return "繁體中文";
                 return new CultureInfo(l).NativeName;

@@ -177,7 +177,7 @@ namespace lilToon
                path.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
                path.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
             {
-                var bytes = File.ReadAllBytes(Path.GetFullPath(path));
+                var bytes = File.ReadAllBytes(lilDirectoryManager.GetFullPath(path));
                 tex.LoadImage(bytes);
             }
 
@@ -266,7 +266,7 @@ namespace lilToon
         public static string ConvertGifToAtlas(Object tex, out int frameCount, out int loopXY, out int duration, out float xScale, out float yScale)
         {
                 string path = AssetDatabase.GetAssetPath(tex);
-                var bytes = File.ReadAllBytes(path);
+                var bytes = File.ReadAllBytes(lilDirectoryManager.GetFullPath(path));
                 var origGif = GifParser.Parse(bytes);
                 var bitmapFrames = GifFrameComposer.Compose(origGif);
                 frameCount = bitmapFrames.Count;
@@ -324,7 +324,7 @@ namespace lilToon
         private static Texture3D ReadCube(string path)
         {
             int size = -1;
-            var sr = new StreamReader(path);
+            var sr = new StreamReader(lilDirectoryManager.GetFullPath(path));
             string line;
             var colors = new List<Color>();
             while((line = sr.ReadLine()) != null)

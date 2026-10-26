@@ -35,7 +35,7 @@ namespace lilToon
             applyButton.normal.textColor = Color.red;
             applyButton.fontStyle = FontStyle.Bold;
 
-            bool isLocked = File.Exists(lilDirectoryManager.GetSettingLockPath());
+            bool isLocked = File.Exists(lilDirectoryManager.GetFullPath(lilDirectoryManager.GetSettingLockPath()));
             EditorGUI.BeginChangeCheck();
             ToggleGUI(GetLoc("sSettingLock"), ref isLocked);
             if(EditorGUI.EndChangeCheck())
@@ -107,7 +107,7 @@ namespace lilToon
         #region
         private static void ShaderSettingOptimizationGUI()
         {
-            GUI.enabled = !File.Exists(lilDirectoryManager.GetSettingLockPath());
+            GUI.enabled = !File.Exists(lilDirectoryManager.GetFullPath(lilDirectoryManager.GetSettingLockPath()));
             var RP = lilRenderPipelineReader.GetRP();
             if(RP == lilRenderPipeline.BRP)
             {
@@ -144,7 +144,7 @@ namespace lilToon
             EditorGUI.indentLevel--;
             EditorGUILayout.LabelField("[Shader] LightMode Override", EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
-            GUI.enabled = !File.Exists(lilDirectoryManager.GetSettingLockPath());
+            GUI.enabled = !File.Exists(lilDirectoryManager.GetFullPath(lilDirectoryManager.GetSettingLockPath()));
             shaderSetting.mainLightModeName = EditorGUILayout.TextField("Main", shaderSetting.mainLightModeName);
             shaderSetting.outlineLightModeName = EditorGUILayout.TextField("Outline", shaderSetting.outlineLightModeName);
             shaderSetting.preLightModeName = EditorGUILayout.TextField("Transparent backface", shaderSetting.preLightModeName);

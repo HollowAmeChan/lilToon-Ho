@@ -211,7 +211,7 @@ namespace lilToon
             insertUsePassPre = "";
             insertUsePassPost = "";
             insertUsePassReference = File.ReadAllText(
-                GetCustomShaderResourcesFolderPath() + "/Misc/ReferenceUVs.lilblock"
+                lilDirectoryManager.GetFullPath(GetCustomShaderResourcesFolderPath() + "/Misc/ReferenceUVs.lilblock")
             );
             isOrigShaderNameLoaded = false;
             replaces = new Dictionary<string, string>();
@@ -479,13 +479,13 @@ namespace lilToon
         {
             string path = assetFolderPath + customShaderDataFile;
 
-            if(!File.Exists(path))
+            if(!File.Exists(lilDirectoryManager.GetFullPath(path)))
             {
                 Debug.LogWarning("[" + assetName + "] " + "File not found: " + path);
                 return;
             }
             AddDependency(ctx, path);
-            var sr = new StreamReader(path);
+            var sr = new StreamReader(lilDirectoryManager.GetFullPath(path));
             string line;
             while((line = sr.ReadLine()) != null)
             {
@@ -610,7 +610,7 @@ namespace lilToon
 
             // for render pipeline
             string pathForRP = assetFolderPath + Path.GetFileNameWithoutExtension(subpath) + rpname + Path.GetExtension(subpath);
-            if(File.Exists(pathForRP))
+            if(File.Exists(lilDirectoryManager.GetFullPath(pathForRP)))
             {
                 AddDependency(ctx, pathForRP);
                 insertPass = ReadTextFile(pathForRP);
@@ -619,7 +619,7 @@ namespace lilToon
 
             // normal
             subpath = assetFolderPath + subpath;
-            if(!File.Exists(subpath))
+            if(!File.Exists(lilDirectoryManager.GetFullPath(subpath)))
             {
                 Debug.LogWarning("[" + assetName + "] " + "File not found: " + subpath);
                 return;
@@ -632,7 +632,7 @@ namespace lilToon
         private static StringBuilder ReadContainerFile(string path, string rpname, AssetImportContext ctx, bool doOptimize)
         {
             var sb = new StringBuilder();
-            var sr = new StreamReader(path);
+            var sr = new StreamReader(lilDirectoryManager.GetFullPath(path));
             string line;
 
             while((line = sr.ReadLine()) != null)
@@ -721,7 +721,7 @@ namespace lilToon
                 subpath = assetFolderPath + subpath;
             }
 
-            if(!File.Exists(subpath))
+            if(!File.Exists(lilDirectoryManager.GetFullPath(subpath)))
             {
                 Debug.LogWarning("[" + assetName + "] " + "File not found: " + subpath);
                 return;
@@ -767,7 +767,7 @@ namespace lilToon
             }
 
             string subpath = assetFolderPath + line.Substring(first, second - first);
-            if(!File.Exists(subpath))
+            if(!File.Exists(lilDirectoryManager.GetFullPath(subpath)))
             {
                 Debug.LogWarning("[" + assetName + "] " + "File not found: " + subpath);
                 return;
@@ -787,7 +787,7 @@ namespace lilToon
             }
 
             string subpath = assetFolderPath + line.Substring(first, second - first);
-            if(!File.Exists(subpath))
+            if(!File.Exists(lilDirectoryManager.GetFullPath(subpath)))
             {
                 Debug.LogWarning("[" + assetName + "] " + "File not found: " + subpath);
                 return;
@@ -816,7 +816,7 @@ namespace lilToon
                 subpath = assetFolderPath + subpath;
             }
 
-            if(!File.Exists(subpath))
+            if(!File.Exists(lilDirectoryManager.GetFullPath(subpath)))
             {
                 Debug.LogWarning("[" + assetName + "] " + "File not found: " + subpath);
                 return;
@@ -867,7 +867,7 @@ namespace lilToon
 
         private static string ReadTextFile(string path)
         {
-            var sr = new StreamReader(path);
+            var sr = new StreamReader(lilDirectoryManager.GetFullPath(path));
             string text = sr.ReadToEnd();
             sr.Close();
             return text;

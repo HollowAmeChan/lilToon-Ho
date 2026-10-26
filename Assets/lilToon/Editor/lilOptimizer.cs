@@ -192,7 +192,7 @@ namespace lilToon
         {
             string optHLSL = RewriteInputHLSLText(dicT, dicD, dicF, dicC);
             string pathOpt = AssetDatabase.GUIDToAssetPath("571051a232e4af44a98389bda858df27");
-            var sw = new StreamWriter(pathOpt, false);
+            var sw = new StreamWriter(lilDirectoryManager.GetFullPath(pathOpt), false);
             sw.Write(optHLSL);
             sw.Close();
         }
@@ -202,10 +202,10 @@ namespace lilToon
             if(dicT.Count == 0 && dicD.Count == 0 && dicF.Count == 0 && dicC.Count == 0) return null;
             string pathBase = AssetDatabase.GUIDToAssetPath("8ff7f7d9c86e1154fb3aac5a8a8681bb");
             string pathOpt = AssetDatabase.GUIDToAssetPath("571051a232e4af44a98389bda858df27");
-            if(string.IsNullOrEmpty(pathBase) || string.IsNullOrEmpty(pathOpt) || !File.Exists(pathBase) || !File.Exists(pathOpt)) return null;
+            if(string.IsNullOrEmpty(pathBase) || string.IsNullOrEmpty(pathOpt) || !File.Exists(lilDirectoryManager.GetFullPath(pathBase)) || !File.Exists(lilDirectoryManager.GetFullPath(pathOpt))) return null;
             var shader = Shader.Find("Hidden/ltspass_proponly");
             var sb = new StringBuilder();
-            var sr = new StreamReader(pathBase);
+            var sr = new StreamReader(lilDirectoryManager.GetFullPath(pathBase));
             string line;
             while ((line = sr.ReadLine()) != null)
             {
@@ -314,9 +314,9 @@ namespace lilToon
         {
             string pathBase = AssetDatabase.GUIDToAssetPath("8ff7f7d9c86e1154fb3aac5a8a8681bb");
             string pathOpt = AssetDatabase.GUIDToAssetPath("571051a232e4af44a98389bda858df27");
-            if(string.IsNullOrEmpty(pathBase) || string.IsNullOrEmpty(pathOpt) || !File.Exists(pathBase) || !File.Exists(pathOpt)) return;
-            var sw = new StreamWriter(pathOpt, false);
-            var sr = new StreamReader(pathBase);
+            if(string.IsNullOrEmpty(pathBase) || string.IsNullOrEmpty(pathOpt) || !File.Exists(lilDirectoryManager.GetFullPath(pathBase)) || !File.Exists(lilDirectoryManager.GetFullPath(pathOpt))) return;
+            var sw = new StreamWriter(lilDirectoryManager.GetFullPath(pathOpt), false);
+            var sr = new StreamReader(lilDirectoryManager.GetFullPath(pathBase));
             sw.Write(sr.ReadToEnd());
             sw.Close();
             sr.Close();

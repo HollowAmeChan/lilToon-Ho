@@ -21,3 +21,9 @@ Unity 2021 skips Material Variant tests because that editor has no Material Vari
 API. The production code isolates these APIs with `UNITY_2022_1_OR_NEWER`.
 This harness does not perform VRChat uploads, Warudo runtime loading, interactive
 Inspector clicking, or XR device rendering.
+
+For UPM validation, install lilToon as a local or Git dependency instead of copying
+it under `Assets`. Change the fixture shader's `Assets/lilToon/` include prefix to
+`Packages/jp.lilxyzw.liltoon/`, and run `LilToonHoUpmValidation.Run`. This also checks
+physical package path resolution, version discovery, language enumeration, culture
+mapping and translation loading before running the full regression harness.

@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -44,6 +45,25 @@ namespace lilToon
         public static string[] GetShaderFolderPaths()       => new[] {GetShaderFolderPath()};
         public static string GetSettingFolderPath()         => GetMainFolderPath();
         public static string GUIDToPath(string GUID)        => AssetDatabase.GUIDToAssetPath(GUID);
+
+        // Keep AssetDatabase paths virtual; resolve only at System.IO boundaries.
+        public static string GetFullPath(string assetPath)
+        {
+            if(string.IsNullOrEmpty(assetPath) || Path.IsPathRooted(assetPath)) return assetPath;
+            var normalized = assetPath.Replace('\\', '/');
+            #if UNITY_2019_1_OR_NEWER
+            if(normalized.StartsWith("Packages/", System.StringComparison.Ordinal))
+            {
+                var package = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(normalized);
+                if(package != null)
+                {
+                    var relativePath = normalized.Substring(package.assetPath.Length).TrimStart('/');
+                    return Path.GetFullPath(Path.Combine(package.resolvedPath, relativePath));
+                }
+            }
+            #endif
+            return Path.GetFullPath(normalized);
+        }
 
         public static bool ExistsClusterCreatorKit() => !string.IsNullOrEmpty(GetClusterCreatorKitPath());
 

@@ -81,7 +81,7 @@ namespace lilToon
         private static PackageVersionInfos GetURPVersion()
         {
             string path = AssetDatabase.GUIDToAssetPath("30648b8d550465f4bb77f1e1afd0b37d");
-            var package = JsonUtility.FromJson<PackageInfos>(File.ReadAllText(path));
+            var package = JsonUtility.FromJson<PackageInfos>(File.ReadAllText(lilDirectoryManager.GetFullPath(path)));
             string guid =
                 package.displayName.Contains("SLZ") ?
                 "753d1ac2429a21a44ac5f937cbbb409f" : // Core
@@ -113,7 +113,7 @@ namespace lilToon
             {
                 try
                 {
-                    var package = JsonUtility.FromJson<PackageInfos>(File.ReadAllText(path));
+                    var package = JsonUtility.FromJson<PackageInfos>(File.ReadAllText(lilDirectoryManager.GetFullPath(path)));
                     version = package.version;
                 }
                 catch (Exception e)

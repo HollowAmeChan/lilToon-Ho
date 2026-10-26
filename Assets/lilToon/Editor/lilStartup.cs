@@ -27,7 +27,7 @@ namespace lilToon
             // Shader setting
             lilToonSetting shaderSetting = null;
             lilToonSetting.InitializeShaderSetting(ref shaderSetting);
-            string currentRPPath = lilDirectoryManager.GetCurrentRPPath();
+            string currentRPPath = lilDirectoryManager.GetFullPath(lilDirectoryManager.GetCurrentRPPath());
             if(File.Exists(currentRPPath))
             {
                 var srRP = new StreamReader(currentRPPath);

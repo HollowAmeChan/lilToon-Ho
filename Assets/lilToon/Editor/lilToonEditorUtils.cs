@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Rendering;
@@ -186,7 +186,7 @@ namespace lilToon
         {
             var srcTexture = new Texture2D(2, 2);
             string path = AssetDatabase.GetAssetPath(Selection.activeObject);
-            var bytes = File.ReadAllBytes(Path.GetFullPath(path));
+            var bytes = File.ReadAllBytes(lilDirectoryManager.GetFullPath(path));
             srcTexture.LoadImage(bytes);
             lilTextureUtils.LoadTexture(ref srcTexture, path);
             int finalWidth;
@@ -658,7 +658,7 @@ namespace lilToon
             string versionVRCSDKWorlds = ReadVersion("067f9b5cc16a52649985a5947e355556");
             if(versionVRCSDKWorlds != null) sb.AppendLine("VRChat SDK - Worlds: " + versionVRCSDKWorlds);
             string versionVRCSDKPath = AssetDatabase.GUIDToAssetPath("2cdbe2e71e2c46e48951c13df254e5b1");
-            if(!string.IsNullOrEmpty(versionVRCSDKPath)) sb.AppendLine("VRChat SDK - Unitypackage: " + File.ReadAllText(versionVRCSDKPath));
+            if(!string.IsNullOrEmpty(versionVRCSDKPath)) sb.AppendLine("VRChat SDK - Unitypackage: " + File.ReadAllText(lilDirectoryManager.GetFullPath(versionVRCSDKPath)));
             sb.AppendLine();
 
             sb.AppendLine("# CVRCCK Information");
@@ -733,7 +733,7 @@ namespace lilToon
             {
                 try
                 {
-                    var package = JsonUtility.FromJson<PackageInfos>(File.ReadAllText(path));
+                    var package = JsonUtility.FromJson<PackageInfos>(File.ReadAllText(lilDirectoryManager.GetFullPath(path)));
                     return package.version;
                 }
                 catch (Exception e)
