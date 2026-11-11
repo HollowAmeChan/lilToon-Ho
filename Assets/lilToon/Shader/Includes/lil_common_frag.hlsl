@@ -614,6 +614,17 @@
         #define LIL_SAMPLE_AnisotropyScaleMask
     #endif
 
+    #if defined(LIL_FEATURE_MATCAP) && defined(LIL_FEATURE_MatCapBumpMap)
+        #define LIL_APPLY_ANISO_MATCAP(anisoNormalWS) if(_Anisotropy2MatCap && !_MatCapCustomNormal) fd.matcapN = anisoNormalWS
+    #else
+        #define LIL_APPLY_ANISO_MATCAP(anisoNormalWS) if(_Anisotropy2MatCap) fd.matcapN = anisoNormalWS
+    #endif
+    #if defined(LIL_FEATURE_MATCAP_2ND) && defined(LIL_FEATURE_MatCap2ndBumpMap)
+        #define LIL_APPLY_ANISO_MATCAP_2ND(anisoNormalWS) if(_Anisotropy2MatCap2nd && !_MatCap2ndCustomNormal) fd.matcap2ndN = anisoNormalWS
+    #else
+        #define LIL_APPLY_ANISO_MATCAP_2ND(anisoNormalWS) if(_Anisotropy2MatCap2nd) fd.matcap2ndN = anisoNormalWS
+    #endif
+
     #define OVERRIDE_ANISOTROPY \
         if(_UseAnisotropy) \
         { \
@@ -626,8 +637,8 @@
             LIL_SAMPLE_AnisotropyScaleMask; \
             float3 anisoNormalWS = lilGetAnisotropyNormalWS(fd.N, fd.T, fd.B, fd.V, fd.anisotropy); \
             if(_Anisotropy2Reflection)  fd.reflectionN  = anisoNormalWS; \
-            if(_Anisotropy2MatCap)      fd.matcapN      = anisoNormalWS; \
-            if(_Anisotropy2MatCap2nd)   fd.matcap2ndN   = anisoNormalWS; \
+            LIL_APPLY_ANISO_MATCAP(anisoNormalWS); \
+            LIL_APPLY_ANISO_MATCAP_2ND(anisoNormalWS); \
             if(_Anisotropy2Reflection)  fd.perceptualRoughness = saturate(1.2 - abs(fd.anisotropy)); \
         }
 #endif

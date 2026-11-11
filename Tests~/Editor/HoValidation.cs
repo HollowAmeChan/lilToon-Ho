@@ -157,6 +157,221 @@ public static class LilToonHoValidation
         Check(Mathf.Abs(actual - expected) < 0.025f, name + " actual=" + actual + " expected=" + expected);
     }
 
+    private static bool Different(Color a, Color b)
+    {
+        return Mathf.Abs(a.r - b.r) > 0.025f || Mathf.Abs(a.g - b.g) > 0.025f || Mathf.Abs(a.b - b.b) > 0.025f;
+    }
+
+    private static void NearColor(Color actual, Color expected, string name)
+    {
+        Near(actual.r, expected.r, name + " R");
+        Near(actual.g, expected.g, name + " G");
+        Near(actual.b, expected.b, name + " B");
+    }
+
+    private static Texture2D MakeMatCapGradient(bool green)
+    {
+        const int size = 32;
+        var texture = new Texture2D(size, size, TextureFormat.RGBAFloat, false, true);
+        for(int y = 0; y < size; y++)
+        {
+            for(int x = 0; x < size; x++)
+            {
+                float value = (green ? y : x) / (size - 1.0f);
+                texture.SetPixel(x, y, green ? new Color(0, value, 0, 1) : new Color(value, 0, 0, 1));
+            }
+        }
+        texture.filterMode = FilterMode.Bilinear;
+        texture.wrapMode = TextureWrapMode.Clamp;
+        texture.Apply(false, false);
+        return texture;
+    }
+
+    private static Texture2D MakeNormalTexture(Color encoded)
+    {
+        var texture = new Texture2D(1, 1, TextureFormat.RGBAFloat, false, true);
+        texture.SetPixel(0, 0, encoded);
+        texture.filterMode = FilterMode.Point;
+        texture.wrapMode = TextureWrapMode.Clamp;
+        texture.Apply(false, false);
+        return texture;
+    }
+
+    private static void ConfigureMatCapFixture(Material material, Texture2D matCap, Texture2D matCap2nd,
+        Texture2D customNormal, Texture2D tangentMap, Texture2D scaleMask)
+    {
+        material.SetFloat("_TestMode", 3);
+        material.SetTexture("_MatCapTex", matCap);
+        material.SetTexture("_MatCap2ndTex", matCap2nd);
+        material.SetTexture("_MatCapBumpMap", customNormal);
+        material.SetTexture("_MatCap2ndBumpMap", customNormal);
+        material.SetTexture("_AnisotropyTangentMap", tangentMap);
+        material.SetTexture("_AnisotropyScaleMask", scaleMask);
+        material.SetVector("_MatCapTex_ST", new Vector4(1, 1, 0, 0));
+        material.SetVector("_MatCap2ndTex_ST", new Vector4(1, 1, 0, 0));
+        material.SetVector("_MatCapBumpMap_ST", new Vector4(1, 1, 0, 0));
+        material.SetVector("_MatCap2ndBumpMap_ST", new Vector4(1, 1, 0, 0));
+        material.SetVector("_AnisotropyTangentMap_ST", new Vector4(1, 1, 0, 0));
+        material.SetVector("_AnisotropyScaleMask_ST", new Vector4(1, 1, 0, 0));
+        material.SetVector("_MatCapBlendUV1", Vector4.zero);
+        material.SetVector("_MatCap2ndBlendUV1", Vector4.zero);
+        material.SetColor("_MatCapColor", Color.white);
+        material.SetColor("_MatCap2ndColor", Color.white);
+        material.SetFloat("_MatCapBlend", 1);
+        material.SetFloat("_MatCap2ndBlend", 1);
+        material.SetFloat("_MatCapBlendMode", 1);
+        material.SetFloat("_MatCap2ndBlendMode", 1);
+        material.SetFloat("_MatCapEnableLighting", 0);
+        material.SetFloat("_MatCap2ndEnableLighting", 0);
+        material.SetFloat("_MatCapShadowMask", 0);
+        material.SetFloat("_MatCap2ndShadowMask", 0);
+        material.SetFloat("_MatCapBackfaceMask", 0);
+        material.SetFloat("_MatCap2ndBackfaceMask", 0);
+        material.SetFloat("_MatCapLod", 0);
+        material.SetFloat("_MatCap2ndLod", 0);
+        material.SetFloat("_MatCapMainStrength", 0);
+        material.SetFloat("_MatCap2ndMainStrength", 0);
+        material.SetFloat("_MatCapNormalStrength", 1);
+        material.SetFloat("_MatCap2ndNormalStrength", 1);
+        material.SetFloat("_MatCapBumpScale", 1);
+        material.SetFloat("_MatCap2ndBumpScale", 1);
+        material.SetFloat("_MatCapPerspective", 0);
+        material.SetFloat("_MatCap2ndPerspective", 0);
+        material.SetFloat("_MatCapZRotCancel", 1);
+        material.SetFloat("_MatCap2ndZRotCancel", 1);
+        material.SetFloat("_MatCapCustomNormal", 1);
+        material.SetFloat("_MatCap2ndCustomNormal", 1);
+        material.SetFloat("_UseMatCap", 1);
+        material.SetFloat("_UseMatCap2nd", 1);
+        material.SetFloat("_UseAnisotropy", 1);
+        material.SetFloat("_AnisotropyScale", -0.8f);
+        material.SetFloat("_Anisotropy2MatCap", 0);
+        material.SetFloat("_Anisotropy2MatCap2nd", 0);
+        material.SetVector("_TestMainNormal", new Vector4(0, 0, 1, 0));
+        material.SetFloat("_TestFacing", 1);
+        material.SetFloat("_FlipNormal", 1);
+    }
+
+    private static void CheckMatCapAnisotropy()
+    {
+        var material = new Material(Shader.Find("Hidden/lilToonHoValidation"));
+        var matCap = MakeMatCapGradient(false);
+        var matCap2nd = MakeMatCapGradient(true);
+        // DXT5nm decoding uses alpha *= red, so this gives a non-axis-aligned test normal.
+        var customNormal = MakeNormalTexture(new Color(0.5f, 0.8f, 1, 1));
+        var tangentMap = MakeNormalTexture(new Color(0.65f, 0.5f, 1, 1));
+        var white = MakeNormalTexture(Color.white);
+        var black = MakeNormalTexture(Color.black);
+        ConfigureMatCapFixture(material, matCap, matCap2nd, customNormal, tangentMap, white);
+
+        foreach(int layer in new[] {1, 2})
+        {
+            string custom = layer == 1 ? "_MatCapCustomNormal" : "_MatCap2ndCustomNormal";
+            string effect = layer == 1 ? "_Anisotropy2MatCap" : "_Anisotropy2MatCap2nd";
+            string otherCustom = layer == 1 ? "_MatCap2ndCustomNormal" : "_MatCapCustomNormal";
+            string otherEffect = layer == 1 ? "_Anisotropy2MatCap2nd" : "_Anisotropy2MatCap";
+            material.SetFloat("_TestMode", layer == 1 ? 4 : 5);
+            material.SetFloat(custom, 1);
+            material.SetFloat(effect, 0);
+            Color initialNormal = Pixel(material);
+            NearColor(initialNormal, new Color(0.5f, 0.5f, 1, 1), "MatCap initial normal layer " + layer);
+            material.SetFloat(effect, 1);
+            NearColor(Pixel(material), initialNormal, "Custom MatCap blocks anisotropy distribution layer " + layer);
+            material.SetFloat(otherCustom, 0);
+            material.SetFloat(otherEffect, 1);
+            NearColor(Pixel(material), initialNormal, "Other non-custom layer does not bypass custom priority layer " + layer);
+            material.SetFloat(custom, 0);
+            Check(Different(Pixel(material), initialNormal), "Non-custom MatCap receives anisotropy distribution layer " + layer);
+            material.SetFloat(effect, 0);
+            NearColor(Pixel(material), initialNormal, "Anisotropy effect switch restores initial normal layer " + layer);
+            material.SetFloat(otherCustom, 1);
+            material.SetFloat(otherEffect, 0);
+        }
+        ConfigureMatCapFixture(material, matCap, matCap2nd, customNormal, tangentMap, white);
+
+        Color customBaseline = Pixel(material);
+        material.SetFloat("_Anisotropy2MatCap", 1);
+        Color customFirstAnisotropy = Pixel(material);
+        material.SetFloat("_Anisotropy2MatCap", 0);
+        material.SetFloat("_Anisotropy2MatCap2nd", 1);
+        Color customSecondAnisotropy = Pixel(material);
+        NearColor(customFirstAnisotropy, customBaseline, "Custom first MatCap ignores anisotropy");
+        NearColor(customSecondAnisotropy, customBaseline, "Custom second MatCap ignores anisotropy");
+        material.SetFloat("_Anisotropy2MatCap", 1);
+        material.SetFloat("_Anisotropy2MatCap2nd", 1);
+        material.SetFloat("_AnisotropyScale", 0.8f);
+        NearColor(Pixel(material), customBaseline, "Custom MatCap ignores anisotropy scale");
+
+        material.SetTexture("_AnisotropyScaleMask", black);
+        NearColor(Pixel(material), customBaseline, "Zero anisotropy mask returns custom-normal baseline");
+        material.SetTexture("_AnisotropyScaleMask", white);
+
+        material.SetFloat("_MatCapCustomNormal", 1);
+        material.SetFloat("_MatCap2ndCustomNormal", 1);
+        material.SetVector("_TestMainNormal", new Vector4(0, 0, 1, 0));
+        Color mainNormalA = Pixel(material);
+        material.SetVector("_TestMainNormal", new Vector4(0.5f, 0, 0.8660254f, 0));
+        Color mainNormalB = Pixel(material);
+        NearColor(mainNormalB, mainNormalA, "Main normal does not pollute custom MatCap");
+
+        material.SetFloat("_MatCapCustomNormal", 0);
+        material.SetFloat("_MatCap2ndCustomNormal", 0);
+        material.SetVector("_TestMainNormal", new Vector4(0, 0, 1, 0));
+        material.SetFloat("_AnisotropyScale", -0.8f);
+        material.SetFloat("_Anisotropy2MatCap", 0);
+        material.SetFloat("_Anisotropy2MatCap2nd", 0);
+        Color nonCustomBaseline = Pixel(material);
+        material.SetFloat("_Anisotropy2MatCap", 1);
+        Color nonCustomFirstAnisotropy = Pixel(material);
+        material.SetFloat("_Anisotropy2MatCap", 0);
+        material.SetFloat("_Anisotropy2MatCap2nd", 1);
+        Color nonCustomSecondAnisotropy = Pixel(material);
+        Check(Different(nonCustomFirstAnisotropy, nonCustomBaseline), "Non-custom first MatCap uses anisotropy");
+        Check(Different(nonCustomSecondAnisotropy, nonCustomBaseline), "Non-custom second MatCap uses anisotropy");
+        Near(nonCustomFirstAnisotropy.g, nonCustomBaseline.g, "Non-custom first anisotropy leaves second-layer channel independent");
+        Near(nonCustomSecondAnisotropy.r, nonCustomBaseline.r, "Non-custom second anisotropy leaves first-layer channel independent");
+        material.SetFloat("_Anisotropy2MatCap", 1);
+        material.SetFloat("_Anisotropy2MatCap2nd", 1);
+        material.SetTexture("_AnisotropyScaleMask", black);
+        NearColor(Pixel(material), nonCustomBaseline, "Zero anisotropy mask returns non-custom baseline");
+        material.SetTexture("_AnisotropyScaleMask", white);
+
+        material.SetFloat("_MatCapCustomNormal", 1);
+        material.SetFloat("_MatCap2ndCustomNormal", 1);
+        material.SetVector("_TestMainNormal", new Vector4(0, 0, 1, 0));
+        material.SetFloat("_Anisotropy2MatCap", 0);
+        material.SetFloat("_Anisotropy2MatCap2nd", 0);
+        material.SetFloat("_TestFacing", 1);
+        Color front = Pixel(material);
+        material.SetFloat("_TestFacing", -1);
+        Color back = Pixel(material);
+        Check(IsFinite(front) && IsFinite(back), "Custom MatCap normals remain finite on both faces");
+        Check(Different(front, back), "Custom MatCap normal flips once on the back face");
+        material.SetFloat("_Anisotropy2MatCap", 1);
+        material.SetFloat("_Anisotropy2MatCap2nd", 1);
+        material.SetFloat("_TestFacing", 1);
+        Color anisotropicFront = Pixel(material);
+        material.SetFloat("_TestFacing", -1);
+        Color anisotropicBack = Pixel(material);
+        Check(IsFinite(anisotropicFront) && IsFinite(anisotropicBack), "Custom MatCap normals remain finite with anisotropy on both faces");
+        Check(Different(anisotropicFront, anisotropicBack), "Custom MatCap normal flips once with anisotropy on the back face");
+
+        Object.DestroyImmediate(material);
+        Object.DestroyImmediate(matCap);
+        Object.DestroyImmediate(matCap2nd);
+        Object.DestroyImmediate(customNormal);
+        Object.DestroyImmediate(tangentMap);
+        Object.DestroyImmediate(white);
+        Object.DestroyImmediate(black);
+    }
+
+    private static bool IsFinite(Color color)
+    {
+        return !float.IsNaN(color.r) && !float.IsInfinity(color.r) &&
+            !float.IsNaN(color.g) && !float.IsInfinity(color.g) &&
+            !float.IsNaN(color.b) && !float.IsInfinity(color.b);
+    }
+
     private static void CheckPixels()
     {
         var material = new Material(Shader.Find("Hidden/lilToonHoValidation"));
@@ -206,6 +421,7 @@ public static class LilToonHoValidation
         var failures = ShaderUtil.GetShaderMessages(material.shader).Where(m => m.severity.ToString() == "Error").ToArray();
         Check(failures.Length == 0, "GPU fixture shader has no compile errors");
         Object.DestroyImmediate(material); Object.DestroyImmediate(gray);
+        CheckMatCapAnisotropy();
     }
 
     private static void CheckFeatureScanning(lilToonSetting settings)
