@@ -125,7 +125,7 @@ namespace lilToon
 
         private void MatCapTextureGUI(ref bool isShow, GUIContent guiContent, MaterialProperty textureName, MaterialProperty blendUV1, MaterialProperty uvMode, MaterialProperty zRotCancel, MaterialProperty perspective, MaterialProperty vrParallaxStrength)
         {
-            lilEditorGUI.MatCapTextureGUI(m_MaterialEditor, isCustomEditor, ref isShow, guiContent, textureName, blendUV1, uvMode, zRotCancel, perspective, vrParallaxStrength);
+            lilEditorGUI.MatCapTextureGUIWithUV(m_MaterialEditor, isCustomEditor, ref isShow, guiContent, textureName, blendUV1, uvMode, zRotCancel, perspective, vrParallaxStrength);
         }
 
         private void MatCapTextureGUI(ref bool isShow, GUIContent guiContent, MaterialProperty textureName, MaterialProperty rgba, MaterialProperty blendUV1, MaterialProperty uvMode, MaterialProperty zRotCancel, MaterialProperty perspective, MaterialProperty vrParallaxStrength)
