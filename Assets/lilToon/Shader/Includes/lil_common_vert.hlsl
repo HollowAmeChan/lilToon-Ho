@@ -203,7 +203,8 @@ LIL_V2F_TYPE vert(appdata input)
         LIL_V2F_OUT_BASE.uv23.zw        = input.uv3;
     #endif
     #if defined(LIL_V2F_UVMAT)
-        LIL_V2F_OUT_BASE.uvMat          = lilCalcMatCapUV(input.uv1, vertexNormalInput.normalWS, viewDirection, headDirection, _MatCapTex_ST, _MatCapBlendUV1.xy, _MatCapZRotCancel, _MatCapPerspective, _MatCapVRParallaxStrength);
+        float2 matcapUVSet = lilGetMatCapUVSet(input.uv0, input.uv1, input.uv2, input.uv3, _MatCapUVMode);
+        LIL_V2F_OUT_BASE.uvMat          = lilCalcMatCapUV(matcapUVSet, vertexNormalInput.normalWS, viewDirection, headDirection, _MatCapTex_ST, _MatCapBlendUV1.xy, _MatCapZRotCancel, _MatCapPerspective, _MatCapVRParallaxStrength);
     #endif
 
     // Position

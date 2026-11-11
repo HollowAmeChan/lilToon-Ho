@@ -72,6 +72,9 @@ public static class LilToonHoValidation
             Check(shader != null, "Find " + name);
             var material = new Material(shader);
             Check(material.HasProperty("_OutlineZBiasMask"), name + " generated Z mask property");
+            Check(material.HasProperty("_MatCapUVMode"), name + " generated MatCap UV selector");
+            if(!name.Contains("Lite"))
+                Check(material.HasProperty("_MatCap2ndUVMode"), name + " generated second MatCap UV selector");
             if(!name.Contains("Lite"))
                 Check(material.HasProperty("_ShadowReceiveMask") && !material.HasProperty("_Shadow2ndReceiveMask") &&
                     !material.HasProperty("_Shadow3rdReceiveMask"), name + " exactly one receive mask");
@@ -365,6 +368,51 @@ public static class LilToonHoValidation
         Object.DestroyImmediate(black);
     }
 
+    private static void CheckMatCapUVModes()
+    {
+        var material = new Material(Shader.Find("Hidden/lilToonHoValidation"));
+        var matCap = MakeMatCapGradient(false);
+        var matCap2nd = MakeMatCapGradient(true);
+        var customNormal = MakeNormalTexture(new Color(0.5f, 0.8f, 1, 1));
+        var tangentMap = MakeNormalTexture(new Color(0.65f, 0.5f, 1, 1));
+        var white = MakeNormalTexture(Color.white);
+        ConfigureMatCapFixture(material, matCap, matCap2nd, customNormal, tangentMap, white);
+        material.SetFloat("_TestMode", 6);
+        material.SetFloat("_UseAnisotropy", 0);
+        material.SetFloat("_MatCapCustomNormal", 0);
+        material.SetFloat("_MatCap2ndCustomNormal", 0);
+        material.SetVector("_MatCapBlendUV1", new Vector4(1, 1, 0, 0));
+        material.SetVector("_MatCap2ndBlendUV1", new Vector4(1, 1, 0, 0));
+        material.SetVector("_TestUV0", new Vector4(0.05f, 0.15f, 0, 0));
+        material.SetVector("_TestUV1", new Vector4(0.25f, 0.35f, 0, 0));
+        material.SetVector("_TestUV2", new Vector4(0.55f, 0.65f, 0, 0));
+        material.SetVector("_TestUV3", new Vector4(0.85f, 0.95f, 0, 0));
+        Check(Mathf.Approximately(material.GetFloat("_MatCapUVMode"), 1) &&
+            Mathf.Approximately(material.GetFloat("_MatCap2ndUVMode"), 1), "MatCap UV mode defaults to UV1");
+        var xs = new[] {0.05f, 0.25f, 0.55f, 0.85f};
+        var ys = new[] {0.15f, 0.35f, 0.65f, 0.95f};
+        for(int mode = 0; mode < 4; mode++)
+        {
+            int secondMode = (mode + 1) % 4;
+            material.SetFloat("_MatCapUVMode", mode);
+            material.SetFloat("_MatCap2ndUVMode", secondMode);
+            var color = Pixel(material);
+            Near(color.r, xs[mode], "MatCap UV mode " + mode + " selects UV" + mode + " in first layer");
+            Near(color.g, ys[secondMode], "MatCap UV mode " + secondMode + " selects UV" + secondMode + " in second layer");
+        }
+        material.SetFloat("_MatCapUVMode", 99);
+        material.SetFloat("_MatCap2ndUVMode", 99);
+        var fallback = Pixel(material);
+        Near(fallback.r, xs[0], "MatCap invalid UV mode falls back to UV0 in first layer");
+        Near(fallback.g, ys[0], "MatCap invalid UV mode falls back to UV0 in second layer");
+        Object.DestroyImmediate(material);
+        Object.DestroyImmediate(matCap);
+        Object.DestroyImmediate(matCap2nd);
+        Object.DestroyImmediate(customNormal);
+        Object.DestroyImmediate(tangentMap);
+        Object.DestroyImmediate(white);
+    }
+
     private static bool IsFinite(Color color)
     {
         return !float.IsNaN(color.r) && !float.IsInfinity(color.r) &&
@@ -422,6 +470,7 @@ public static class LilToonHoValidation
         Check(failures.Length == 0, "GPU fixture shader has no compile errors");
         Object.DestroyImmediate(material); Object.DestroyImmediate(gray);
         CheckMatCapAnisotropy();
+        CheckMatCapUVModes();
     }
 
     private static void CheckFeatureScanning(lilToonSetting settings)

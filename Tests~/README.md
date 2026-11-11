@@ -17,6 +17,12 @@ It writes `HoValidation-results.txt` in the test project and exits with 0 on suc
 Pass `-ho-verify-generated` to check the supplied generated shaders without
 regenerating them. Do not pass `-nographics` because GPU readback is required.
 
+The GPU fixture also checks both MatCap layers' UV mode selectors. It assigns
+distinct UV0-UV3 values, uses a red/green MatCap gradient, and verifies modes
+0-3 plus invalid-mode fallback to UV0. The generated-shader compile checks
+cover the Lite vertex path; the fixture's pixel checks cover the normal
+fragment path.
+
 Unity 2021 skips Material Variant tests because that editor has no Material Variant
 API. The production code isolates these APIs with `UNITY_2022_1_OR_NEWER`.
 This harness does not perform VRChat uploads, Warudo runtime loading, interactive

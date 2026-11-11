@@ -795,6 +795,24 @@ namespace lilToon
             }
         }
 
+        public static void MatCapTextureGUI(MaterialEditor m_MaterialEditor, bool isCustomEditor, ref bool isShow, GUIContent guiContent, MaterialProperty textureName, MaterialProperty blendUV1, MaterialProperty uvMode, MaterialProperty zRotCancel, MaterialProperty perspective, MaterialProperty vrParallaxStrength)
+        {
+            if(!CheckPropertyToDraw(guiContent) && !CheckPropertyToDraw(blendUV1, uvMode, zRotCancel, perspective, vrParallaxStrength)) return;
+            isShow = DrawSimpleFoldout(m_MaterialEditor, guiContent, textureName, isShow, isCustomEditor);
+            if(isShow)
+            {
+                EditorGUI.indentLevel++;
+                UVSettingGUI(m_MaterialEditor, textureName);
+                LocalizedProperty(m_MaterialEditor, blendUV1);
+                LocalizedProperty(m_MaterialEditor, uvMode);
+                LocalizedProperty(m_MaterialEditor, zRotCancel);
+                LocalizedProperty(m_MaterialEditor, perspective);
+                LocalizedProperty(m_MaterialEditor, vrParallaxStrength);
+                EditorGUI.indentLevel--;
+            }
+        }
+
+        // Keep the pre-UV-selector overload available to external custom inspectors.
         public static void MatCapTextureGUI(MaterialEditor m_MaterialEditor, bool isCustomEditor, ref bool isShow, GUIContent guiContent, MaterialProperty textureName, MaterialProperty blendUV1, MaterialProperty zRotCancel, MaterialProperty perspective, MaterialProperty vrParallaxStrength)
         {
             if(!CheckPropertyToDraw(guiContent) && !CheckPropertyToDraw(blendUV1, zRotCancel, perspective, vrParallaxStrength)) return;
@@ -811,6 +829,28 @@ namespace lilToon
             }
         }
 
+        public static void MatCapTextureGUI(MaterialEditor m_MaterialEditor, bool isCustomEditor, ref bool isShow, GUIContent guiContent, MaterialProperty textureName, MaterialProperty rgba, MaterialProperty blendUV1, MaterialProperty uvMode, MaterialProperty zRotCancel, MaterialProperty perspective, MaterialProperty vrParallaxStrength)
+        {
+            if(!CheckPropertyToDraw(guiContent) && !CheckPropertyToDraw(blendUV1, uvMode, zRotCancel, perspective, vrParallaxStrength)) return;
+            isShow = DrawSimpleFoldout(m_MaterialEditor, guiContent, textureName, rgba, isShow, isCustomEditor);
+            if(isShow)
+            {
+                EditorGUI.indentLevel++;
+                UVSettingGUI(m_MaterialEditor, textureName);
+                LocalizedProperty(m_MaterialEditor, blendUV1);
+                LocalizedProperty(m_MaterialEditor, uvMode);
+                LocalizedProperty(m_MaterialEditor, zRotCancel);
+                LocalizedProperty(m_MaterialEditor, perspective);
+                LocalizedProperty(m_MaterialEditor, vrParallaxStrength);
+
+                var buttons = Buttons("UV Preset", "MatCap", "AngelRing");
+                if(buttons[0]) ApplyMatCapUVPreset(false, blendUV1, zRotCancel, perspective, vrParallaxStrength);
+                if(buttons[1]) ApplyMatCapUVPreset(true, blendUV1, zRotCancel, perspective, vrParallaxStrength);
+                EditorGUI.indentLevel--;
+            }
+        }
+
+        // Keep the pre-UV-selector overload available to external custom inspectors.
         public static void MatCapTextureGUI(MaterialEditor m_MaterialEditor, bool isCustomEditor, ref bool isShow, GUIContent guiContent, MaterialProperty textureName, MaterialProperty rgba, MaterialProperty blendUV1, MaterialProperty zRotCancel, MaterialProperty perspective, MaterialProperty vrParallaxStrength)
         {
             if(!CheckPropertyToDraw(guiContent) && !CheckPropertyToDraw(blendUV1, zRotCancel, perspective, vrParallaxStrength)) return;

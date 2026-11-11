@@ -46,6 +46,7 @@ Shader "Hidden/lilToonLiteCutout"
         [lilToggleLeft] _UseMatCap                  ("sMatCap", Int) = 0
                         _MatCapTex                  ("Texture", 2D) = "white" {}
         [lilVec2R]      _MatCapBlendUV1             ("sBlendUV1", Vector) = (0,0,0,0)
+        [lilEnum]       _MatCapUVMode               ("UV Mode|UV0|UV1|UV2|UV3", Int) = 1
         [lilToggle]     _MatCapZRotCancel           ("sMatCapZRotCancel", Int) = 1
         [lilToggle]     _MatCapPerspective          ("sFixPerspective", Int) = 1
                         _MatCapVRParallaxStrength   ("sVRParallaxStrength", Range(0, 1)) = 1

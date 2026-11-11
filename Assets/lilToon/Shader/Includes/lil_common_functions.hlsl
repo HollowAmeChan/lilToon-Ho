@@ -564,6 +564,14 @@ float2 lilCalcAtlasAnimation(float2 uv, float4 decalAnimation, float4 decalSubPa
 }
 
 // MatCap
+float2 lilGetMatCapUVSet(float2 uv0, float2 uv1, float2 uv2, float2 uv3, uint uvMode)
+{
+    if(uvMode == 1) return uv1;
+    if(uvMode == 2) return uv2;
+    if(uvMode == 3) return uv3;
+    return uv0;
+}
+
 float2 lilCalcMatCapUV(float2 uv1, float3 normalWS, float3 viewDirection, float3 headDirection, float4 matcap_ST, float2 matcapBlendUV1, bool zRotCancel, bool matcapPerspective, float matcapVRParallaxStrength)
 {
     // Simple

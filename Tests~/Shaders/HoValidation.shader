@@ -70,6 +70,8 @@ Shader "Hidden/lilToonHoValidation"
         _FlipNormal ("Flip Normal", Float) = 1
         _MatCapApplyTransparency ("MatCap Transparency", Float) = 0
         _MatCap2ndApplyTransparency ("MatCap 2nd Transparency", Float) = 0
+        _MatCapUVMode ("MatCap UV Mode", Float) = 1
+        _MatCap2ndUVMode ("MatCap 2nd UV Mode", Float) = 1
     }
     SubShader
     {
@@ -107,6 +109,10 @@ Shader "Hidden/lilToonHoValidation"
             float4 _TestColor;
             float4 _TestMainNormal;
             float _TestFacing;
+            float4 _TestUV0;
+            float4 _TestUV1;
+            float4 _TestUV2;
+            float4 _TestUV3;
             struct v2f { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; float bias : TEXCOORD1; };
             v2f vert(appdata_img input)
             {
@@ -125,7 +131,7 @@ Shader "Hidden/lilToonHoValidation"
                     return float4(outlineVector * 0.5 + 0.5, 1);
                 }
                 if(_TestMode == 1) return float4(input.bias.xxx, 1);
-                if(_TestMode >= 3 && _TestMode <= 5)
+                if(_TestMode >= 3 && _TestMode <= 6)
                 {
                     lilFragData fd = (lilFragData)0;
                     fd.col = 0;
@@ -136,6 +142,13 @@ Shader "Hidden/lilToonHoValidation"
                     fd.uvMain = input.uv;
                     fd.uv0 = input.uv;
                     fd.uv1 = input.uv;
+                    if(_TestMode == 6)
+                    {
+                        fd.uv0 = _TestUV0.xy;
+                        fd.uv1 = _TestUV1.xy;
+                        fd.uv2 = _TestUV2.xy;
+                        fd.uv3 = _TestUV3.xy;
+                    }
                     fd.V = normalize(float3(0.6, 0.6, 0.52915025));
                     fd.headV = fd.V;
                     fd.N = fd.origN = normalize(_TestMainNormal.xyz);

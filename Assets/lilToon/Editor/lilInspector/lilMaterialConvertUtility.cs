@@ -316,7 +316,8 @@ namespace lilToon
             {
                 liteMaterial.SetTexture("_MatCapTex",               bakedMatCap);
                 liteMaterial.SetFloat("_UseMatCap",                 useMatCap.floatValue);
-                liteMaterial.SetFloat("_MatCapBlendUV1",            matcapBlendUV1.floatValue);
+                liteMaterial.SetVector("_MatCapBlendUV1",            matcapBlendUV1.vectorValue);
+                liteMaterial.SetFloat("_MatCapUVMode",              matcapUVMode.floatValue);
                 liteMaterial.SetFloat("_MatCapZRotCancel",          matcapZRotCancel.floatValue);
                 liteMaterial.SetFloat("_MatCapPerspective",         matcapPerspective.floatValue);
                 liteMaterial.SetFloat("_MatCapVRParallaxStrength",  matcapVRParallaxStrength.floatValue);

@@ -613,9 +613,11 @@ uint    _Cull;
 #endif
 #if defined(LIL_FEATURE_MATCAP)
     uint    _MatCapBlendMode;
+    uint    _MatCapUVMode;
 #endif
 #if defined(LIL_FEATURE_MATCAP_2ND)
     uint    _MatCap2ndBlendMode;
+    uint    _MatCap2ndUVMode;
 #endif
 #if defined(LIL_FEATURE_RIMLIGHT)
     uint    _RimBlendMode;

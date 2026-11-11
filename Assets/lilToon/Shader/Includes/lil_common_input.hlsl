@@ -159,6 +159,7 @@ CBUFFER_START(UnityPerMaterial)
     uint    _Cull;
     uint    _OutlineCull;
     uint    _EmissionMap_UVMode;
+    uint    _MatCapUVMode;
     uint    _OutlineVertexR2Width;
     lilBool _Invisible;
     lilBool _UseShadow;
@@ -694,9 +695,11 @@ CBUFFER_START(UnityPerMaterial)
     #endif
     #if defined(LIL_MULTI_INPUTS_MATCAP)
         uint    _MatCapBlendMode;
+        uint    _MatCapUVMode;
     #endif
     #if defined(LIL_MULTI_INPUTS_MATCAP_2ND)
         uint    _MatCap2ndBlendMode;
+        uint    _MatCap2ndUVMode;
     #endif
     #if defined(LIL_MULTI_INPUTS_GLITTER)
         uint    _GlitterUVMode;

@@ -1550,7 +1550,8 @@
             #endif
 
             // UV
-            float2 matUV = lilCalcMatCapUV(fd.uv1, normalize(N), fd.V, fd.headV, _MatCapTex_ST, _MatCapBlendUV1.xy, _MatCapZRotCancel, _MatCapPerspective, _MatCapVRParallaxStrength);
+            float2 matcapUVSet = lilGetMatCapUVSet(fd.uv0, fd.uv1, fd.uv2, fd.uv3, _MatCapUVMode);
+            float2 matUV = lilCalcMatCapUV(matcapUVSet, normalize(N), fd.V, fd.headV, _MatCapTex_ST, _MatCapBlendUV1.xy, _MatCapZRotCancel, _MatCapPerspective, _MatCapVRParallaxStrength);
 
             // Color
             float4 matCapColor = _MatCapColor;
@@ -1618,7 +1619,8 @@
             #endif
 
             // UV
-            float2 mat2ndUV = lilCalcMatCapUV(fd.uv1, N, fd.V, fd.headV, _MatCap2ndTex_ST, _MatCap2ndBlendUV1.xy, _MatCap2ndZRotCancel, _MatCap2ndPerspective, _MatCap2ndVRParallaxStrength);
+            float2 matcap2ndUVSet = lilGetMatCapUVSet(fd.uv0, fd.uv1, fd.uv2, fd.uv3, _MatCap2ndUVMode);
+            float2 mat2ndUV = lilCalcMatCapUV(matcap2ndUVSet, N, fd.V, fd.headV, _MatCap2ndTex_ST, _MatCap2ndBlendUV1.xy, _MatCap2ndZRotCancel, _MatCap2ndPerspective, _MatCap2ndVRParallaxStrength);
 
             // Color
             float4 matCap2ndColor = _MatCap2ndColor;

@@ -255,6 +255,7 @@ Shader "Hidden/ltspass_tess_transparent"
                         _MatCapTex                  ("Texture", 2D) = "white" {}
                         _MatCapMainStrength         ("sMainColorPower", Range(0, 1)) = 0
         [lilVec2R]      _MatCapBlendUV1             ("sBlendUV1", Vector) = (0,0,0,0)
+        [lilEnum]       _MatCapUVMode               ("UV Mode|UV0|UV1|UV2|UV3", Int) = 1
         [lilToggle]     _MatCapZRotCancel           ("sMatCapZRotCancel", Int) = 1
         [lilToggle]     _MatCapPerspective          ("sFixPerspective", Int) = 1
                         _MatCapVRParallaxStrength   ("sVRParallaxStrength", Range(0, 1)) = 1
@@ -278,6 +279,7 @@ Shader "Hidden/ltspass_tess_transparent"
                         _MatCap2ndTex               ("Texture", 2D) = "white" {}
                         _MatCap2ndMainStrength      ("sMainColorPower", Range(0, 1)) = 0
         [lilVec2R]      _MatCap2ndBlendUV1          ("sBlendUV1", Vector) = (0,0,0,0)
+        [lilEnum]       _MatCap2ndUVMode            ("UV Mode|UV0|UV1|UV2|UV3", Int) = 1
         [lilToggle]     _MatCap2ndZRotCancel        ("sMatCapZRotCancel", Int) = 1
         [lilToggle]     _MatCap2ndPerspective       ("sFixPerspective", Int) = 1
                         _MatCap2ndVRParallaxStrength ("sVRParallaxStrength", Range(0, 1)) = 1
