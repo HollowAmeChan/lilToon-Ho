@@ -703,6 +703,7 @@ Shader "Hidden/ltspass_proponly"
         //----------------------------------------------------------------------------------------------------------------------
         // Main
         [lilVec3Float]  _FakeShadowVector           ("sFakeShadowVectors", Vector) = (0,0,0,0.05)
+
     }
 
     SubShader

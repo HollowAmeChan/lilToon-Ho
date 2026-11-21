@@ -25,3 +25,7 @@ Drag and drop unitypackage to the Unity window, or import `https://github.com/li
 ## 日本語
 unitypackageをUnityウィンドウにドラッグ＆ドロップ、もしくはUPMから`https://github.com/lilxyzw/lilToon.git?path=Assets/lilToon#master`をインポートしてください。  
 [ダウンロード](https://github.com/lilxyzw/lilToon/releases) / [ドキュメント](https://lilxyzw.github.io/lilToon/index.html#/ja-jp/) / [lilToonを用いた制作物の配布手順について](https://lilxyzw.github.io/lilToon/#/ja-jp/first?id=liltoonを用いた制作物の配布について)
+
+## 日期版本与安装包
+
+推送默认分支后自动发布日期版本（`YYYYMMDD-HHMMSS`）与 Unity 安装包；在 GitHub Releases 下载 `.tgz`，通过 Package Manager 从 tarball 安装。版本对齐、手动发布与安装说明见 [发布说明](.github/RELEASING.md)。

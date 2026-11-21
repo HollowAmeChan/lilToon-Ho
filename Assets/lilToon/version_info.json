@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "version": "dev",
+  "release_tag": "dev",
+  "release_name": "lilToon-Ho development build",
+  "repository": "HollowAmeChan/lilToon-Ho",
+  "channel": "dev",
+  "package_name": "jp.lilxyzw.liltoon",
+  "package_version": "2.4.1"
+}
